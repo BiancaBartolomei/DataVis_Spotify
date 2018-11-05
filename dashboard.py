@@ -24,46 +24,60 @@ server = app.server
 
 app.title = "SPOTIFY POPULARITY DATABASE"
 
+# ----------------------------------------------------------------------------------------------------------------------
 app.layout = html.Div(children=[
-#-----------------------------------------------------------------------------------------------------------------------
-    #Header
+
+    # ------------ Header --------------------
     html.Div(children=[
         html.Header([
             html.Div([
-                html.Span(children='Titulo', className='mdl-layout-title'),
+                html.Span(children='Spotify Dashboard', className='mdl-layout-title'),
 
                 html.Div([
 
                 ],className='mdl-layout-spacer'),
 
                 html.Nav([
-                    html.A('link1', href='/link-location',  className='mdl-navigation__link'),
-                    html.A('link1', href='/link-location',  className='mdl-navigation__link'),
-                    html.A('link1', href='/link-location',  className='mdl-navigation__link'),
+
                 ], className='mdl-navigation mdl-layout--large-screen-only')
 
             ], className='mdl-layout__header-row')
         ], className='mdl-layout__header'),
 
         html.Div([
-            html.Span(children='Titulo', className='mdl-layout-title'),
+            html.Span(children='Menu', className='mdl-layout-title'),
 
             html.Nav([
-                html.A('link1', href='/link-location',  className='mdl-navigation__link'),
-                html.A('link1', href='/link-location',  className='mdl-navigation__link'),
-                html.A('link1', href='/link-location',  className='mdl-navigation__link')
+                html.A('Top 10', href='/page-top-10',  className='mdl-navigation__link'),
+                html.A('Análise de grupos', href='/page-grupos',  className='mdl-navigation__link'),
+                html.A('Análise de Features', href='/page-features',  className='mdl-navigation__link'),
+                html.A('Análise de popularidade', href='/page-popularidade',  className='mdl-navigation__link')
             ], className="mdl-navigation")
         ], className='mdl-layout__drawer')
     ], className='mdl-layout mdl-js-layout mdl-layout--fixed-header'),
 
 
-#-----------------------------------------------------------------------------------------------------------------------
+    # --------- Main --------------
     html.Main([
         html.Div([
 
         ], className='page-content')
     ], className='mdl-layout__content')
 ])
+# ----------------------------------------------------------------------------------------------------------------------
+
+@app.callback(dash.dependencies.Output('page-content', 'children'),
+              [dash.dependencies.Input('url', 'pathname')])
+def display_page(pathname):
+    if pathname == '/page-features':
+        return page_features
+    elif pathname == '/page-grupos':
+        return page_grupos
+    elif pathname == '/page-popularidade':
+        return page_popularidade
+    else:
+        return page_top_10
+    # You could also return a 404 "URL not found" page here
 
 
 if __name__ == '__main__':
