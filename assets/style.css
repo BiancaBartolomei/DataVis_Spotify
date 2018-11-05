@@ -6,7 +6,7 @@
  * @link https://github.com/google/material-design-lite
  */
 @charset "UTF-8";html {
-    color: rgba(0,0,0,.87)
+    color: rgb(43,78,114);
 }
 
 ::-moz-selection {
@@ -165,7 +165,8 @@ html,body {
     font-family: "Helvetica","Arial",sans-serif;
     font-size: 14px;
     font-weight: 400;
-    line-height: 20px
+    background-color: rgb(255,255,255);
+    line-height: 20px;
 }
 
 h1,h2,h3,h4,h5,h6,p {
@@ -3166,8 +3167,8 @@ input.mdl-button[type="submit"] {
     background: #fff;
     border-radius: 2px;
     box-sizing: border-box;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 100px;
+    margin-right: 100px;
 }
 
 .mdl-card__media {
@@ -4770,7 +4771,7 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple,.md
     min-height: 64px;
     max-height: 1000px;
     z-index: 3;
-    background-color: rgb(63,81,181);
+    background-color: rgb(43,78,114);
     color: rgb(255,255,255);
     box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
     transition-duration: .2s;
@@ -6758,7 +6759,8 @@ fieldset[disabled] .mdl-textfield .mdl-textfield__label,.mdl-textfield.is-disabl
     margin: 0 auto;
     -webkit-align-items: stretch;
     -ms-flex-align: stretch;
-    align-items: stretch
+    align-items: stretch;
+    border-radius: 10px;
 }
 
 .mdl-grid.mdl-grid--no-spacing {
@@ -7327,7 +7329,8 @@ fieldset[disabled] .mdl-textfield .mdl-textfield__label,.mdl-textfield.is-disabl
 
 @media (min-width: 840px) {
     .mdl-grid {
-        padding:8px
+        padding:8px;
+        background:  rgb(255,255,255);
     }
 
     .mdl-cell {
@@ -7675,4 +7678,22 @@ iframe.heightSet {
 
 .demo-wrapper iframe {
     border: 1px solid rgba(0,0,0,.5)
+}
+.card-teste{
+    box-shadow: -1px 2px 66px -13px rgba(0,0,0,0.62);
+    transition: 0.3s;
+    border-radius: 5px; /* 5px rounded corners */
+    margin-left: 150px;
+    margin-right: 150px;
+    margin-bottom: 50px;
+    margin-top: 50px;
+}
+
+.header_custom{
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    magin-top : 10px;
+    magin-bottom : 10px;
+    text-shadow: 0px 3px 7px rgba(150, 150, 150, 1);
 }
