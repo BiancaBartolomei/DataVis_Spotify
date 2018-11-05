@@ -52,9 +52,9 @@ category_name = input('Categoria: ')
 ########################################################################################################################
 
 # Conexao com o banco de dados por meio do driver de conexao psycopg2
-con = driver.connect(host='ec2-184-72-234-230.compute-1.amazonaws.com', database='d9vbm9b8oufhkq',
-        user='bdxulnbxczgzlx', password='41d56d0522876a442b7494fa56070a4993b34868812d14d5f93debd7a98fde6b')
-# con = driver.connect(host='localhost', database='spotify', user='biancabartolomei', password='19972015')
+con = driver.connect(host='', database='',
+        user='', password='')
+# con = driver.connect(host='', database='', user='', password='')
 #
 cur = con.cursor()
 
