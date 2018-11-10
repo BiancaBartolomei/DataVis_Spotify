@@ -10,7 +10,8 @@ from datetime import date as dt
 
 
 
-engine = create_engine('postgres://luismalta:123@localhost:5432/spotify_db')
+
+engine = create_engine('')
 
 df_features_track = pd.read_sql_query('select * from spotify_db.features_track',con=engine)
 df_features_artist= pd.read_sql_query('select * from spotify_db.features_artist',con=engine)
@@ -379,6 +380,46 @@ page_top_10 =  html.Div([
                 ),
             ], className='mdl-grid')
 # ----------------------------------------------------------------------------------------------------------------------
+ # ----------------------------------------------------------------------------------------------------------------------
+# PAGE FEATURES
+
+df_artist_genre = pd.read_sql_query('select * from spotify_db.musicas_por_genero', con=engine)
+colors_artist_genre = ['#110014',                       '#220128',
+                       '#33013c',
+                       '#440250',
+                       '#550264',
+                       '#660278',
+                       '#77038c',
+                       '#8803a0',
+                       '#9904b4',
+                       '#ab04c8',
+                       '#bc04dc',
+                       '#cd05f0',
+                       '#d70ffa',
+                       '#da23fb',
+                       '#de37fb',
+                       '#e040fb',
+                       '#e45ffc',
+                       '#e873fc',
+                       '#eb87fd',
+                       '#ee9bfd']
+page_grupos = html.Div([
+                    dcc.Graph(
+                        id='pizza-artist-genre',
+                        figure={
+                            'data': [go.Pie(
+                                labels=df_artist_genre['artist_genre'][:20],
+                                values=df_artist_genre['quant'][:20],
+                                textinfo='value',
+                                hole=.4,
+                                marker=dict(colors=colors_artist_genre),
+                            )],
+                        }
+                    ),
+                ], className='mdl-cell mdl-cell--12-col'),
+
+
+
 
 
 # Callback Paginas
@@ -389,8 +430,8 @@ def display_page(pathname):
         return page_features
     elif pathname == '/page-grupos':
         return page_grupos
-    elif pathname == '/page-popularidade':
-        return page_popularidade
+    # elif pathname == '/page-popularidade':
+    #     return page_popularidade
     if pathname == '/page-top-10':
         return page_top_10
     else:
