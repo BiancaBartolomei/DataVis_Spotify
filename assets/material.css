@@ -11513,7 +11513,7 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
 }
 
 .titulo{
-  margin-top: 100px;
+  margin-top: 200px;
 
 }
 
@@ -11522,14 +11522,13 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
   color:rgba(100, 97, 104,1);
   font-family: Roboto;
 }
-
+.titulo-grafico{
+  text-align:center;
+  color:rgba(100, 97, 104,1);
+  font-family: Roboto;
+  margin-top: 20px;
+}
 .content-all{
 
 }
 
-.card2 {
-  -webkit-box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.19);
-  -moz-box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.19);
-  box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.19);
-
-}

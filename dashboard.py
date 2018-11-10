@@ -10,6 +10,7 @@ from datetime import date as dt
 
 
 
+engine = create_engine('postgres://biancabartolomei:19972015@localhost:5432/spotify')
 
 df_features_track = pd.read_sql_query('select * from spotify_db.features_track',con=engine)
 df_features_artist= pd.read_sql_query('select * from spotify_db.features_artist',con=engine)
@@ -434,15 +435,44 @@ def group_selection():
 
 page_grupos = html.Div([
 
-                # html.Div([
-                #     html.Div([
-                #
-                #     ], className=''),
-                # ], className='mdl-cell mdl-cell--2-col'),
+                html.Div([
+                ], className='mdl-cell mdl-cell--1-col'),
+                html.Div([
+                    html.Div([
+                        html.H1(['Análises de Grupo'], className='titulo-texto')
+                    ], className='titulo'),
+                ], className='mdl-cell mdl-cell--2-col'),
+                html.Div([
+                ], className='mdl-cell mdl-cell--1-col'),
 
                 html.Div([
                     html.Div([
-                        html.H6(['Quantidade de músicas explícitas por gênero musical']),
+                        dcc.Graph(
+                            id='pizza-artist-genre',
+                            figure={
+                                'data': [go.Pie(
+                                    labels=df_artist_genre['artist_genre'][:20],
+                                    values=df_artist_genre['quant'][:20],
+                                    textinfo='value',
+                                    hole=.4,
+                                    marker=dict(colors=colors_artist_genre),
+                                )],
+                                'layout': {
+                                    'title': 'Quantidade de artistas por gênero musical',
+                                    'font': {'family': 'Roboto',
+                                             'size': 12,
+                                             'color': '#646168'},
+                                }
+                            },
+
+                        ),
+                    ], className='card-2'),
+                ], className='mdl-cell mdl-cell--8-col'),
+
+
+
+                html.Div([
+                    html.Div([
                         dcc.Graph(
                             id='pizza-explicit-genre',
                             figure={
@@ -453,6 +483,12 @@ page_grupos = html.Div([
                                     hole=.4,
                                     marker=dict(colors=colors_artist_genre),
                                 )],
+                                'layout': {
+                                    'title': 'Quantidade de músicas explícitas por gênero musical',
+                                    'font': {'family': 'Roboto',
+                                             'size': 15,
+                                             'color': '#646168'}
+                                }
                             }
                         ),
                     ], className='card'),
@@ -471,34 +507,15 @@ page_grupos = html.Div([
                                     marker=dict(colors=colors_artist_genre),
                                 )],
                                 'layout': {
-                                    'title': 'Quantidade de músicas pela média de duração'
+                                    'title': 'Quantidade de músicas pela média de duração',
+                                    'font': {'family': 'Roboto',
+                                             'size': 15,
+                                             'color': '#646168'},
                                 }
                             },
                         ),
                     ], className='card')
                 ], className='mdl-cell mdl-cell--5-col'),
-                html.Div([
-                    html.Div([
-                        dcc.Graph(
-                            id='pizza-artist-genre',
-                            figure={
-                                'data': [go.Pie(
-                                    labels=df_artist_genre['artist_genre'][:20],
-                                    values=df_artist_genre['quant'][:20],
-                                    textinfo='value',
-                                    hole=.4,
-                                    marker=dict(colors=colors_artist_genre),
-                                )],
-                                'layout': {
-                                    'title': 'Quantidade de artistas por gênero musical'
-                                }
-                            },
-
-                        ),
-                    ], className='card2'),
-                ], className='mdl-cell mdl-cell--12-col'),
-
-                # html.Div([], className='mdl-cell mdl-cell--1-col'),
 
 
 
