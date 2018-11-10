@@ -9,9 +9,9 @@ create or replace view spotify_db.top_musicas_populares as
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-create or replace view spotify_db.features_musicas as
+create or replace view spotify_db.features_track as
   select track_name, track_liveness, track_speechness, track_valence, track_energy, track_acousticness, track_instrumentalness, track_dancebility
-  from spotify_db.track
+  from spotify_db.track;
 # ----------------------------------------------------------------------------------------------------------------------
 
 create or replace view spotify_db.musicas_por_genero
@@ -20,3 +20,21 @@ from spotify_db.artist a
 where a.artist_genre is not null
 group by a.artist_genre order by quant desc;
 
+# ----------------------------------------------------------------------------------------------------------------------
+create or replace view spotify_db.features_artist as
+  select a.artist_name, avg(track_liveness) as track_liveness, avg(track_speechness) as track_speechness,
+        avg(track_valence) as track_valence, avg(track_energy) as track_energy, avg(track_acousticness) as track_acousticness, avg(track_instrumentalness) as track_instrumentalness,
+         avg(track_dancebility) as track_dancebility
+  from spotify_db.track t join spotify_db.track_artist ta on t.track_id = ta.track_id
+        join  spotify_db.artist a on ta.artist_id = a.artist_id
+  group by a.artist_name;
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+create or replace view spotify_db.features_playlist as
+  select a.playlist_name, avg(track_liveness) as track_liveness, avg(track_speechness) as track_speechness,
+        avg(track_valence) as track_valence, avg(track_energy) as track_energy, avg(track_acousticness) as track_acousticness, avg(track_instrumentalness) as track_instrumentalness,
+         avg(track_dancebility) as track_dancebility
+  from spotify_db.track t join spotify_db.track_playlist ta on t.track_id = ta.track_id
+        join  spotify_db.playlist a on ta.playlist_id = a.playlist_id
+  group by a.playlist_name;

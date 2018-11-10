@@ -10,7 +10,7 @@ from datetime import date as dt
 
 
 
-engine = create_engine('postgres://luismalta:Lo3355199731@localhost:5432/spotify_db')
+engine = create_engine('postgres://luismalta:123@localhost:5432/spotify_db')
 
 df_features_track = pd.read_sql_query('select * from spotify_db.features_track',con=engine)
 df_features_artist= pd.read_sql_query('select * from spotify_db.features_artist',con=engine)
@@ -28,18 +28,43 @@ app.config.suppress_callback_exceptions = True
 
 app.title = "SPOTIFY POPULARITY DATABASE"
 
-def update_dropdown_features_music():
-    opt_music= []
-    musics = []
-    for music in df_features_track['track_name']:
+def update_dropdown_features_track():
+    opt_track= []
+    tracks = []
+    for track in df_features_track['track_name']:
 
-        if music not in musics:
-            a = {'label':music, 'value':music}
-            opt_music.append(a)
-            musics.append(music)
+        if track not in tracks:
+            a = {'label':track, 'value':track}
+            opt_track.append(a)
+            tracks.append(track)
 
-    opt_music.sort
-    return opt_music
+
+    return sorted(opt_track, key=lambda k: k['label'])
+
+def update_dropdown_features_artist():
+    opt_artist= []
+    artists = []
+    for artist in df_features_artist['artist_name']:
+
+        if artist not in artists:
+            a = {'label':artist, 'value':artist}
+            opt_artist.append(a)
+            artists.append(artist)
+
+    return sorted(opt_artist, key=lambda k: k['label'])
+
+def update_dropdown_features_playlist():
+    opt_playlist= []
+    playlists = []
+    for playlist in df_features_playlist['playlist_name']:
+
+        if playlist not in playlists:
+            a = {'label':playlist, 'value':playlist}
+            opt_playlist.append(a)
+            playlists.append(playlist)
+
+
+    return sorted(opt_playlist, key=lambda k: k['label'])
 
 # ----------------------------------------------------------------------------------------------------------------------
 app.layout = html.Div(children=[
@@ -86,44 +111,129 @@ app.layout = html.Div(children=[
 # PAGE FEATURES
 
 page_features = html.Div([
-                html.Div([
-                    dcc.Graph(
-                        id='radar-feature-musica',
-                        figure={
-                            'data': [go.Scatterpolar(
-                                r=[df_features_track['track_liveness'][4], df_features_track['track_speechness'][4],
-                                   df_features_track['track_valence'][4], df_features_track['track_energy'][4],
-                                   df_features_track['track_acousticness'][4],
-                                   df_features_track['track_instrumentalness'][4],
-                                   df_features_track['track_dancebility'][4]],
-                                theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
-                                       'Instrumentalness', 'Dancebility'],
-                                fill='toself'
-                            )],
-                            'layout': [go.Layout(
-                                polar=dict(
-                                    radialaxis=dict(
-                                        visible=True,
-                                        range=[0, 1]
-                                    )
+                    # Feature Track
+                    html.Div([
+                        html.Div([
+                            dcc.Graph(
+                                id='radar-feature-track',
+                                figure={
+                                    'data': [go.Scatterpolar(
+                                        r=[df_features_track['track_liveness'][4], df_features_track['track_speechness'][4],
+                                           df_features_track['track_valence'][4], df_features_track['track_energy'][4],
+                                           df_features_track['track_acousticness'][4],
+                                           df_features_track['track_instrumentalness'][4],
+                                           df_features_track['track_dancebility'][4]],
+                                        theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
+                                               'Instrumentalness', 'Dancebility'],
+                                        fill='toself'
+                                    )],
+                                    'layout': [go.Layout(
+                                        polar=dict(
+                                            radialaxis=dict(
+                                                visible=True,
+                                                range=[0, 1]
+                                            )
+                                        ),
+                                        showlegend=True
+                                    )]
+
+                                }
+                            ),
+
+                            html.Div([
+                                dcc.Dropdown(
+                                    id='dropdown-feature-track',
+                                    options=update_dropdown_features_track(),
+                                    multi=False,
+                                    value=""
                                 ),
-                                showlegend=True
-                            )]
+                            ]),
+                        ], className='card'),
 
-                        }
-                    ),
-                ], className='mdl-cell mdl-cell--12-col'),
+                    ], className='mdl-cell mdl-cell--4-col'),
 
-                html.Div([
-                    dcc.Dropdown(
-                        id='dropdown-feature-music',
-                        options=update_dropdown_features_music(),
-                        multi=False,
-                        value=""
-                    ),
-                ], className='mdl-cell mdl-cell--6-col'),
+                    # Feature Artist
+                    html.Div([
+                        html.Div([
+                            dcc.Graph(
+                                id='radar-feature-artist',
+                                figure={
+                                    'data': [go.Scatterpolar(
+                                        r=[df_features_artist['track_liveness'][4], df_features_artist['track_speechness'][4],
+                                           df_features_artist['track_valence'][4], df_features_artist['track_energy'][4],
+                                           df_features_artist['track_acousticness'][4],
+                                           df_features_artist['track_instrumentalness'][4],
+                                           df_features_artist['track_dancebility'][4]],
+                                        theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
+                                               'Instrumentalness', 'Dancebility'],
+                                        fill='toself'
+                                    )],
+                                    'layout': [go.Layout(
+                                        polar=dict(
+                                            radialaxis=dict(
+                                                visible=True,
+                                                range=[0, 1]
+                                            )
+                                        ),
+                                        showlegend=True
+                                    )]
 
-            ], className= 'mdl-grid'),
+                                }
+                            ),
+
+                            html.Div([
+                                dcc.Dropdown(
+                                    id='dropdown-feature-artist',
+                                    options=update_dropdown_features_artist(),
+                                    multi=False,
+                                    value=""
+                                ),
+                            ]),
+                        ], className='card'),
+                    ],className='mdl-cell mdl-cell--4-col'),
+
+                        # Feature Playlist
+                        html.Div([
+                            html.Div([
+                                dcc.Graph(
+                                    id='radar-feature-playlist',
+                                    figure={
+                                        'data': [go.Scatterpolar(
+                                            r=[df_features_playlist['track_liveness'][4], df_features_playlist['track_speechness'][4],
+                                               df_features_playlist['track_valence'][4], df_features_playlist['track_energy'][4],
+                                               df_features_playlist['track_acousticness'][4],
+                                               df_features_playlist['track_instrumentalness'][4],
+                                               df_features_playlist['track_dancebility'][4]],
+                                            theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
+                                                   'Instrumentalness', 'Dancebility'],
+                                            fill='toself'
+                                        )],
+                                        'layout': [go.Layout(
+                                            polar=dict(
+                                                radialaxis=dict(
+                                                    visible=True,
+                                                    range=[0, 1]
+                                                )
+                                            ),
+                                            showlegend=True
+                                        )]
+
+                                    }
+                                ),
+
+                                html.Div([
+                                    dcc.Dropdown(
+                                        id='dropdown-feature-playlist',
+                                        options=update_dropdown_features_playlist(),
+                                        multi=False,
+                                        value=""
+                                    ),
+                                ]),
+                            ], className='card'),
+
+                    ], className='mdl-cell mdl-cell--4-col')
+
+            ], className= 'mdl-grid')
 # ----------------------------------------------------------------------------------------------------------------------
 
 # PAGE TOP 10
