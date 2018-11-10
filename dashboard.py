@@ -10,7 +10,7 @@ from datetime import date as dt
 
 
 
-engine = create_engine('postgres://luismalta:Lo3355199731@localhost:5432/spotify_db')
+engine = create_engine('')
 
 df_features_musicas = pd.read_sql_query('select * from spotify_db.features_musicas',con=engine)
 
