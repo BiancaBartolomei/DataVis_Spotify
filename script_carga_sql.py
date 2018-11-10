@@ -52,8 +52,8 @@ category_name = input('Categoria: ')
 ########################################################################################################################
 
 # Conexao com o banco de dados por meio do driver de conexao psycopg2
-con = driver.connect(host='', database='',
-        user='', password='')
+con = driver.connect(host=host, database=banco_de_dados,
+        user=usuario, password=password)
 # con = driver.connect(host='', database='', user='', password='')
 #
 cur = con.cursor()
@@ -99,6 +99,7 @@ lista_id_artist_popularity = cur.fetchall()
 
 ########################################################################################################################
 # Obtencao de dados pelas API e tratamento dos mesmos
+data_hoje = str(dt.date.today()) + " 00:00:00"
 
 if token:
     spotifyObject = spotipy.Spotify(auth=token)
@@ -108,7 +109,7 @@ if token:
     playlist_name = category['playlists']['items']
 
     # for playlist_index in playlist_name:
-    for playlist_index in playlist_name[1:2]:
+    for playlist_index in playlist_name:
         playlist_id = playlist_index['id']
         playlist_name = playlist_index['name']
         playlist_collaborative = playlist_index['collaborative']
@@ -169,9 +170,9 @@ if token:
                     lista_id_artist.append((artist_id,))
                     print(artist_id, artist_name, artist_genre, artist_followers)
 
-                if (artist_id, dt.date.today()) not in lista_id_artist_popularity:
-                    lista_id_artist_popularity.append((artist_id, dt.date.today()))
-                    Martist_popularity.append((artist_id, dt.date.today(), artist_popularity))
+                if (artist_id, data_hoje) not in lista_id_artist_popularity:
+                    lista_id_artist_popularity.append((artist_id, data_hoje))
+                    Martist_popularity.append((artist_id, data_hoje , artist_popularity))
 
 
                 # Extrai features de uma track
@@ -214,9 +215,9 @@ if token:
                                            track_tempo,track_valence, track_number, track_energy,
                                            track_acousticness,track_instrumentalness, track_danceability, track_duration)
 
-                        if (track_id, dt.date.today()) not in lista_id_track_popularity:
-                            lista_id_track_popularity.append((track_id, dt.date.today()))
-                            Mtrack_popularity.append((track_id, dt.date.today(), track_popularity))
+                        if (track_id, data_hoje) not in lista_id_track_popularity:
+                            lista_id_track_popularity.append((track_id, data_hoje))
+                            Mtrack_popularity.append((track_id, data_hoje, track_popularity))
 else:
     print ("Can't get token")
 
