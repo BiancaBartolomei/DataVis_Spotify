@@ -38,3 +38,16 @@ create or replace view spotify_db.features_playlist as
   from spotify_db.track t join spotify_db.track_playlist ta on t.track_id = ta.track_id
         join  spotify_db.playlist a on ta.playlist_id = a.playlist_id
   group by a.playlist_name;
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+create or replace view spotify_db.explicit_genre
+as  select count(t.track_id) as quant, a.artist_genre
+from spotify_db.track t join spotify_db.track_artist ta on t.track_id = ta.track_id
+join spotify_db.artist a on ta.artist_id = a.artist_id
+where track_explicit = 't' and a.artist_genre is not null
+group by a.artist_genre order by quant desc;
+
+
+create or replace view spotify_db.duration_track
+as select track_id, track_duration from spotify_db.track;
