@@ -8,7 +8,7 @@ import plotly.graph_objs as go
 from sqlalchemy import create_engine
 from datetime import date as dt
 
-engine = create_engine('postgres://luismalta:123@localhost:5432/spotify_db')
+# engine = create_engine('postgres://luismalta:123@localhost:5432/spotify_db')
 
 engine = create_engine('postgres://biancabartolomei:19972015@localhost:5432/spotify')
 
@@ -67,47 +67,33 @@ def update_dropdown_features_playlist():
     return sorted(opt_playlist, key=lambda k: k['label'])
 
 # ----------------------------------------------------------------------------------------------------------------------
-app.layout = html.Div(children=[
-
+app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
-# ------------ Header --------------------
-    html.Div(children=[
-        html.Header([
-            html.Div([
-                html.Span(children='Spotify Dashboard', className='mdl-layout-title'),
-
-                html.Div([
-
-                ],className='mdl-layout-spacer'),
-
-                html.Nav([
-
-                ], className='mdl-navigation mdl-layout--large-screen-only')
-
-            ], className='mdl-layout__header-row')
-        ], className='mdl-layout__header'),
-
+    html.Header([
         html.Div([
-            html.Span(children='Menu', className='mdl-layout-title'),
+            html.Span(['Title'], className='mdl-layout-title'),
+            html.Div([], className='mdl-layout-spacer')
+        ], className='mdl-layout__header-row')
+    ], className='mdl-layout__header mdl-layout__header--scroll'),
 
-            html.Nav([
-                dcc.Link('Top 10', href='/top-10', className='mdl-navigation__link'),
-                dcc.Link('Análise de grupos', href='page-grupos', className='mdl-navigation__link'),
-                dcc.Link('Análise de Features', href='page-features', className='mdl-navigation__link'),
-                dcc.Link('Análise de popularidade', href='/page-popularidade', className='mdl-navigation__link'),
-            ], className="mdl-navigation")
-        ], className='mdl-layout__drawer')
-    ], className='mdl-layout mdl-js-layout mdl-layout--fixed-header'),
-
+    html.Div([
+        html.Span(['Title2'], className='mdl-layout-title'),
+        html.Nav([
+            dcc.Link('Top 10', href='/top-10', className='mdl-navigation__link'),
+            dcc.Link('Análise de grupos', href='page-grupos', className='mdl-navigation__link'),
+            dcc.Link('Análise de Features', href='page-features', className='mdl-navigation__link'),
+            dcc.Link('Análise de popularidade', href='/page-popularidade', className='mdl-navigation__link'),
+        ], className='mdl-navigation')
+    ], className='mdl-layout__drawer'),
 
     # --------- Main --------------
     html.Main([
-        html.Div(id='page-main',className='page-content'),
-    ]),
+        html.Div(id='page-main', className='page-content'),
+    ], className='mdl-layout__content'),
 
-])
+], className='mdl-layout mdl-js-layout')
 
-# ----------------------------------------------------------------------------------------------------------------------
+
 # PAGE FEATURES
 
 page_features = html.Div([
@@ -451,7 +437,7 @@ page_grupos = html.Div([
                 html.Div([
                     html.Div([
                         html.H1(['Análises de Grupo'], className='titulo-texto')
-                    ], className='titulo'),
+                    ], className='titulo-grupos'),
                 ], className='mdl-cell mdl-cell--2-col'),
                 html.Div([
                 ], className='mdl-cell mdl-cell--1-col'),
