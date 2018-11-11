@@ -8,7 +8,7 @@ import plotly.graph_objs as go
 from sqlalchemy import create_engine
 from datetime import date as dt
 
-
+engine = create_engine('postgres://luismalta:123@localhost:5432/spotify_db')
 
 engine = create_engine('postgres://biancabartolomei:19972015@localhost:5432/spotify')
 
@@ -133,7 +133,8 @@ page_features = html.Div([
                                            df_features_track['track_dancebility'][4]],
                                         theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
                                                'Instrumentalness', 'Dancebility'],
-                                        fill='toself'
+                                        fill='toself',
+                                        marker = dict( color = '#4101c1')
                                     )],
                                     'layout': [go.Layout(
                                         polar=dict(
@@ -174,7 +175,8 @@ page_features = html.Div([
                                            df_features_artist['track_dancebility'][4]],
                                         theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
                                                'Instrumentalness', 'Dancebility'],
-                                        fill='toself'
+                                        fill='toself',
+                                        marker = dict( color = '#4101c1')
                                     )],
                                     'layout': [go.Layout(
                                         polar=dict(
@@ -203,6 +205,17 @@ page_features = html.Div([
                         # Feature Playlist
                         html.Div([
                             html.Div([
+                                html.Div([
+                                    html.H6(['     '], ),
+                                    html.H6(["Feature por Playlist"], className='titulo-texto-grafico'),
+                                    dcc.Dropdown(
+                                        id='dropdown-feature-playlist',
+                                        options=update_dropdown_features_playlist(),
+                                        multi=False,
+                                        value="",
+                                        style=dict(margin=dict(l=0, t=0, r=0, b=1000))
+                                    ),
+                                ], className="dropdown-html"),
                                 dcc.Graph(
                                     id='radar-feature-playlist',
                                     figure={
@@ -214,7 +227,8 @@ page_features = html.Div([
                                                df_features_playlist['track_dancebility'][4]],
                                             theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
                                                    'Instrumentalness', 'Dancebility'],
-                                            fill='toself'
+                                            fill='toself',
+                                            marker = dict( color = '#4101c1')
                                         )],
                                         'layout': [go.Layout(
                                             polar=dict(
@@ -229,14 +243,7 @@ page_features = html.Div([
                                     }
                                 ),
 
-                                html.Div([
-                                    dcc.Dropdown(
-                                        id='dropdown-feature-playlist',
-                                        options=update_dropdown_features_playlist(),
-                                        multi=False,
-                                        value=""
-                                    ),
-                                ]),
+
                             ], className='card'),
 
                     ], className='mdl-cell mdl-cell--4-col'),
@@ -263,7 +270,9 @@ def display_page(track_selected):
            temp['track_dancebility'].values[0]],
         theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
                'Instrumentalness', 'Dancebility'],
-        fill='toself'
+        fill='toself',
+        marker=dict(color='#4101c1'),
+
     ))
 
     layout_trace.append(
@@ -302,7 +311,8 @@ def display_page(artist_selected):
            temp['track_dancebility'].values[0]],
         theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
                'Instrumentalness', 'Dancebility'],
-        fill='toself'
+        fill='toself',
+        marker=dict(color='#4101c1')
     ))
 
     layout_trace.append(
@@ -341,7 +351,8 @@ def display_page(playlist_selected):
            temp['track_dancebility'].values[0]],
         theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
                'Instrumentalness', 'Dancebility'],
-        fill='toself'
+        fill='toself',
+        marker=dict(color='#4101c1')
     ))
 
     layout_trace.append(
