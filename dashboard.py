@@ -431,14 +431,13 @@ def group_selection():
 
 
 page_grupos = html.Div([
-    html.Div([
 
                 # html.Div([
                 # ], className='mdl-cell mdl-cell--1-col'),
                 html.Div([
-                    html.Div([
-                        html.H1(['Análises de Grupo'], className='titulo-texto-grupos')
-                    ], className='titulo-grupos'),
+                    # html.Div([
+                        html.H1(['Análises de Grupo'], className='titulo-grupos')
+                    # ], className='titulo-grupos'),
                 ], className='mdl-cell mdl-cell--3-col'),
                 html.Div([
                 ], className='mdl-cell mdl-cell--1-col'),
@@ -469,57 +468,56 @@ page_grupos = html.Div([
 
 
 
-                # html.Div([
-                #     html.Div([
-                #         dcc.Graph(
-                #             id='pizza-explicit-genre',
-                #             figure={
-                #                 'data': [go.Pie(
-                #                     labels=df_explicit_genre['artist_genre'][:20],
-                #                     values=df_explicit_genre['quant'][:20],
-                #                     textinfo='value',
-                #                     hole=.4,
-                #                     marker=dict(colors=colors_artist_genre),
-                #                 )],
-                #                 'layout': {
-                #                     'title': 'Quantidade de músicas explícitas por gênero musical',
-                #                     'font': {'family': 'Roboto',
-                #                              'size': 15,
-                #                              'color': '#646168'}
-                #                 }
-                #             }
-                #         ),
-                #     ], className='card'),
-                # ], className='mdl-cell mdl-cell--7-col'),
-                #
-                # html.Div([
-                #     html.Div([
-                #         dcc.Graph(
-                #             id='pizza-duration-track',
-                #             figure={
-                #                 'data': [go.Pie(
-                #                     labels=['0', '1', '2', '3'],
-                #                     values=group_selection(),
-                #                     textinfo='value',
-                #                     hole=.4,
-                #                     marker=dict(colors=colors_artist_genre),
-                #                 )],
-                #                 'layout': {
-                #                     'title': 'Quantidade de músicas pela média de duração',
-                #                     'font': {'family': 'Roboto',
-                #                              'size': 15,
-                #                              'color': '#646168'},
-                #                 }
-                #             },
-                #         ),
-                #     ], className='card')
-                # ], className='mdl-cell mdl-cell--5-col'),
+                html.Div([
+                    html.Div([
+                        dcc.Graph(
+                            id='pizza-explicit-genre',
+                            figure={
+                                'data': [go.Pie(
+                                    labels=df_explicit_genre['artist_genre'][:20],
+                                    values=df_explicit_genre['quant'][:20],
+                                    textinfo='value',
+                                    hole=.4,
+                                    marker=dict(colors=colors_artist_genre),
+                                )],
+                                'layout': {
+                                    'title': 'Quantidade de músicas explícitas por gênero musical',
+                                    'font': {'family': 'Roboto',
+                                             'size': 15,
+                                             'color': '#646168'}
+                                }
+                            }
+                        ),
+                    ], className='card'),
+                ], className='mdl-cell mdl-cell--7-col'),
+
+                html.Div([
+                    html.Div([
+                        dcc.Graph(
+                            id='pizza-duration-track',
+                            figure={
+                                'data': [go.Pie(
+                                    labels=['0', '1', '2', '3'],
+                                    values=group_selection(),
+                                    textinfo='value',
+                                    hole=.4,
+                                    marker=dict(colors=colors_artist_genre),
+                                )],
+                                'layout': {
+                                    'title': 'Quantidade de músicas pela média de duração',
+                                    'font': {'family': 'Roboto',
+                                             'size': 15,
+                                             'color': '#646168'},
+                                }
+                            },
+                        ),
+                    ], className='card')
+                ], className='mdl-cell mdl-cell--5-col'),
 
 
 
             ], className='mdl-grid')
 
-], id='page-main', className='page-content')
 
 
 

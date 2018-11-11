@@ -11510,26 +11510,26 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
   -webkit-box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.19);
   -moz-box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.19);
   box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.19);
-  margin-top: 100px;
+  margin-top: 0px;
   /*border-left:15px solid #2eb9ce;*/
 }
 
 .titulo-grupos{
-  margin-top: 200px;
+  margin-top: 100px;
+  background-color: white;
+  border-bottom: 50px groove #660278;
+  text-align: center;
+  color:rgba(100, 97, 104,1);
+  font-family: Roboto;
   -webkit-box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.19);
   -moz-box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.19);
-  /*box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.19);*/
-  background-color: white;
-  border-left:10px solid #2eb9ce;
-  width: 350px;
-  height: 300px;
-  text-align: center;
+  box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.19);
 }
 .titulo-texto-grupos{
   text-align:center;
   color:rgba(100, 97, 104,1);
   font-family: Roboto;
-  margin-top: 100px;
+    background-color: #1f78ff;
 }
 
 .titulo-texto{
