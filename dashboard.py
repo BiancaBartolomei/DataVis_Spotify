@@ -8,9 +8,9 @@ import plotly.graph_objs as go
 from sqlalchemy import create_engine
 from datetime import date as dt
 
-# engine = create_engine('postgres://luismalta:123@localhost:5432/spotify_db')
+engine = create_engine('postgres://luismalta:123@localhost:5432/spotify_db')
 
-engine = create_engine('postgres://biancabartolomei:19972015@localhost:5432/spotify')
+# engine = create_engine('postgres://biancabartolomei:19972015@localhost:5432/spotify')
 
 df_features_track = pd.read_sql_query('select * from spotify_db.features_track',con=engine)
 df_features_artist= pd.read_sql_query('select * from spotify_db.features_artist',con=engine)
@@ -26,7 +26,7 @@ server = app.server
 
 app.config.suppress_callback_exceptions = True
 
-app.title = "SPOTIFY POPULARITY DATABASE"
+app.title = "SPOTIFY DASHBOARD"
 
 def update_dropdown_features_track():
     opt_track= []
@@ -71,13 +71,13 @@ app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     html.Header([
         html.Div([
-            html.Span(['Title'], className='mdl-layout-title'),
+            html.Span(['Spotify Dashboard'], className='mdl-layout-title'),
             html.Div([], className='mdl-layout-spacer')
         ], className='mdl-layout__header-row')
     ], className='mdl-layout__header mdl-layout__header--scroll'),
 
     html.Div([
-        html.Span(['Title2'], className='mdl-layout-title'),
+        html.Span(['Menu'], className='mdl-layout-title'),
         html.Nav([
             dcc.Link('Top 10', href='/top-10', className='mdl-navigation__link'),
             dcc.Link('Análise de grupos', href='page-grupos', className='mdl-navigation__link'),
@@ -101,48 +101,64 @@ page_features = html.Div([
                     html.Div([
                         html.Div([
                            html.H1(["Análise de features"],className='titulo-texto')
-                        ],className='titulo')
+                        ],className='')
 
                     ],className='mdl-cell mdl-cell--12-col'),
 
                     # Feature Track
                     html.Div([
                         html.Div([
-                            dcc.Graph(
-                                id='radar-feature-track',
-                                figure={
-                                    'data': [go.Scatterpolar(
-                                        r=[df_features_track['track_liveness'][4], df_features_track['track_speechness'][4],
-                                           df_features_track['track_valence'][4], df_features_track['track_energy'][4],
-                                           df_features_track['track_acousticness'][4],
-                                           df_features_track['track_instrumentalness'][4],
-                                           df_features_track['track_dancebility'][4]],
-                                        theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
-                                               'Instrumentalness', 'Dancebility'],
-                                        fill='toself',
-                                        marker = dict( color = '#4101c1')
-                                    )],
-                                    'layout': [go.Layout(
-                                        polar=dict(
-                                            radialaxis=dict(
-                                                visible=True,
-                                                range=[0, 1]
-                                            )
-                                        ),
-                                        showlegend=True
-                                    )]
-
-                                }
-                            ),
-
                             html.Div([
-                                dcc.Dropdown(
-                                    id='dropdown-feature-track',
-                                    options=update_dropdown_features_track(),
-                                    multi=False,
-                                    value=""
-                                ),
-                            ]),
+
+                                html.Div([
+                                    html.H6(['Track'], className='titulo-grafico')
+                                ], className='mdl-cell mdl-cell--12-col'),
+
+                                html.Div([], className='mdl-cell mdl-cell--3-col'),
+
+                                html.Div([
+                                    dcc.Dropdown(
+                                        id='dropdown-feature-track',
+                                        options=update_dropdown_features_track(),
+                                        multi=False,
+                                        value=""
+                                    ),
+                                ], className='mdl-cell mdl-cell--6-col'),
+
+                                html.Div([], className='mdl-cell mdl-cell--3-col'),
+
+                                html.Div([
+                                    dcc.Graph(
+                                        id='radar-feature-track',
+                                        figure={
+                                            'data': [go.Scatterpolar(
+                                                r=[df_features_track['track_liveness'][4],
+                                                   df_features_track['track_speechness'][4],
+                                                   df_features_track['track_valence'][4],
+                                                   df_features_track['track_energy'][4],
+                                                   df_features_track['track_acousticness'][4],
+                                                   df_features_track['track_instrumentalness'][4],
+                                                   df_features_track['track_dancebility'][4]],
+                                                theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
+                                                       'Instrumentalness', 'Dancebility'],
+                                                fill='toself',
+                                                marker=dict(color='#4101c1')
+                                            )],
+                                            'layout': [go.Layout(
+                                                polar=dict(
+                                                    radialaxis=dict(
+                                                        visible=True,
+                                                        range=[0, 1]
+                                                    )
+                                                ),
+                                                showlegend=True
+                                            )]
+
+                                        }
+                                    ),
+                                ], className='mdl-cell mdl-cell--12-col'),
+
+                            ], className='mdl-grid')
                         ], className='card'),
 
                     ], className='mdl-cell mdl-cell--4-col'),
@@ -150,41 +166,59 @@ page_features = html.Div([
                     # Feature Artist
                     html.Div([
                         html.Div([
-                            dcc.Graph(
-                                id='radar-feature-artist',
-                                figure={
-                                    'data': [go.Scatterpolar(
-                                        r=[df_features_artist['track_liveness'][4], df_features_artist['track_speechness'][4],
-                                           df_features_artist['track_valence'][4], df_features_artist['track_energy'][4],
-                                           df_features_artist['track_acousticness'][4],
-                                           df_features_artist['track_instrumentalness'][4],
-                                           df_features_artist['track_dancebility'][4]],
-                                        theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
-                                               'Instrumentalness', 'Dancebility'],
-                                        fill='toself',
-                                        marker = dict( color = '#4101c1')
-                                    )],
-                                    'layout': [go.Layout(
-                                        polar=dict(
-                                            radialaxis=dict(
-                                                visible=True,
-                                                range=[0, 1]
-                                            )
-                                        ),
-                                        showlegend=True
-                                    )]
-
-                                }
-                            ),
-
                             html.Div([
-                                dcc.Dropdown(
-                                    id='dropdown-feature-artist',
-                                    options=update_dropdown_features_artist(),
-                                    multi=False,
-                                    value=""
-                                ),
-                            ]),
+
+                                html.Div([
+                                    html.H6(['Artist'], className='titulo-grafico'),
+                                ], className='mdl-cell mdl-cell--12-col'),
+
+
+                                html.Div([], className='mdl-cell mdl-cell--3-col'),
+
+                                html.Div([
+                                    dcc.Dropdown(
+                                        id='dropdown-feature-artist',
+                                        options=update_dropdown_features_artist(),
+                                        multi=False,
+                                        value=""
+                                    ),
+                                ], className='mdl-cell mdl-cell--6-col'),
+
+                                html.Div([], className='mdl-cell mdl-cell--3-col'),
+
+                                html.Div([
+                                    dcc.Graph(
+                                        id='radar-feature-artist',
+                                        figure={
+                                            'data': [go.Scatterpolar(
+                                                r=[df_features_artist['track_liveness'][4],
+                                                   df_features_artist['track_speechness'][4],
+                                                   df_features_artist['track_valence'][4],
+                                                   df_features_artist['track_energy'][4],
+                                                   df_features_artist['track_acousticness'][4],
+                                                   df_features_artist['track_instrumentalness'][4],
+                                                   df_features_artist['track_dancebility'][4]],
+                                                theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
+                                                       'Instrumentalness', 'Dancebility'],
+                                                fill='toself',
+                                                marker=dict(color='#4101c1')
+                                            )],
+                                            'layout': [go.Layout(
+                                                polar=dict(
+                                                    radialaxis=dict(
+                                                        visible=True,
+                                                        range=[0, 1]
+                                                    )
+                                                ),
+                                                showlegend=True
+                                            )]
+
+                                        }
+                                    ),
+                                ], className='mdl-cell mdl-cell--12-col'),
+
+
+                            ], className='mdl-grid')
                         ], className='card'),
                     ],className='mdl-cell mdl-cell--4-col'),
 
@@ -192,43 +226,58 @@ page_features = html.Div([
                         html.Div([
                             html.Div([
                                 html.Div([
-                                    html.H6(['     '], ),
-                                    html.H6(["Feature por Playlist"], className='titulo-texto-grafico'),
-                                    dcc.Dropdown(
-                                        id='dropdown-feature-playlist',
-                                        options=update_dropdown_features_playlist(),
-                                        multi=False,
-                                        value="",
-                                        style=dict(margin=dict(l=0, t=0, r=0, b=1000))
-                                    ),
-                                ], className="dropdown-html"),
-                                dcc.Graph(
-                                    id='radar-feature-playlist',
-                                    figure={
-                                        'data': [go.Scatterpolar(
-                                            r=[df_features_playlist['track_liveness'][4], df_features_playlist['track_speechness'][4],
-                                               df_features_playlist['track_valence'][4], df_features_playlist['track_energy'][4],
-                                               df_features_playlist['track_acousticness'][4],
-                                               df_features_playlist['track_instrumentalness'][4],
-                                               df_features_playlist['track_dancebility'][4]],
-                                            theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
-                                                   'Instrumentalness', 'Dancebility'],
-                                            fill='toself',
-                                            marker = dict( color = '#4101c1')
-                                        )],
-                                        'layout': [go.Layout(
-                                            polar=dict(
-                                                radialaxis=dict(
-                                                    visible=True,
-                                                    range=[0, 1]
-                                                )
-                                            ),
-                                            showlegend=True
-                                        )]
 
-                                    }
-                                ),
+                                    html.Div([
+                                        html.H6(['Playlist'], className='titulo-grafico')
+                                    ], className='mdl-cell mdl-cell--12-col'),
 
+                                    html.Div([], className='mdl-cell mdl-cell--3-col'),
+
+                                    html.Div([
+                                        dcc.Dropdown(
+                                            id='dropdown-feature-playlist',
+                                            options=update_dropdown_features_playlist(),
+                                            multi=False,
+                                            value="",
+                                        ),
+                                    ], className='mdl-cell mdl-cell--6-col'),
+
+                                    html.Div([], className='mdl-cell mdl-cell--3-col'),
+
+                                    html.Div([
+                                        dcc.Graph(
+                                            id='radar-feature-playlist',
+                                            figure={
+                                                'data': [go.Scatterpolar(
+                                                    r=[df_features_playlist['track_liveness'][4],
+                                                       df_features_playlist['track_speechness'][4],
+                                                       df_features_playlist['track_valence'][4],
+                                                       df_features_playlist['track_energy'][4],
+                                                       df_features_playlist['track_acousticness'][4],
+                                                       df_features_playlist['track_instrumentalness'][4],
+                                                       df_features_playlist['track_dancebility'][4]],
+                                                    theta=['Liveness', 'Speechness', 'Valence', 'Energy',
+                                                           'Acousticness',
+                                                           'Instrumentalness', 'Dancebility'],
+                                                    fill='toself',
+                                                    marker=dict(color='#4101c1')
+                                                )],
+                                                'layout': [go.Layout(
+                                                    polar=dict(
+                                                        radialaxis=dict(
+                                                            visible=True,
+                                                            range=[0, 1]
+                                                        )
+                                                    ),
+                                                    showlegend=True
+                                                )]
+
+                                            }
+                                        ),
+                                    ],className='mdl-cell mdl-cell--12-col'),
+
+
+                                ], className='mdl-grid')
 
                             ], className='card'),
 
