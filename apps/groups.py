@@ -1,42 +1,23 @@
-import dash
+# -*- coding: utf-8 -*-
+
 import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
 import plotly.graph_objs as go
 from sqlalchemy import create_engine
-from datetime import date as dt
-import dash_table
-
-
-from app import app
+import numpy as np
 
 engine = create_engine('postgres://luismalta:123@localhost:5432/spotify_db')
 
-
 df_artist_genre = pd.read_sql_query('select * from spotify_db.musicas_por_genero', con=engine)
-colors_artist_genre = ['#110014',                       '#220128',
-                       '#33013c',
-                       '#440250',
-                       '#550264',
-                       '#660278',
-                       '#77038c',
-                       '#8803a0',
-                       '#9904b4',
-                       '#ab04c8',
-                       '#bc04dc',
-                       '#cd05f0',
-                       '#d70ffa',
-                       '#da23fb',
-                       '#de37fb',
-                       '#e040fb',
-                       '#e45ffc',
-                       '#e873fc',
-                       '#eb87fd',
-                       '#ee9bfd']
 df_explicit_genre = pd.read_sql_query('select * from spotify_db.explicit_genre', con=engine)
 df_duration_track = pd.read_sql_query('select * from spotify_db.duration_track', con=engine)
 
-import numpy as np
+
+colors_artist_genre = ['#110014', '#220128', '#33013c', '#440250', '#550264', '#660278', '#77038c', '#8803a0',
+                       '#9904b4', '#ab04c8', '#bc04dc', '#cd05f0', '#d70ffa', '#da23fb', '#de37fb', '#e040fb',
+                       '#e45ffc', '#e873fc', '#eb87fd', '#ee9bfd']
+
 group_1 = np.percentile(df_duration_track['track_duration'], 25)
 group_2 = np.percentile(df_duration_track['track_duration'], 50)
 group_3 = np.percentile(df_duration_track['track_duration'], 75)
@@ -151,5 +132,3 @@ page_grupos = html.Div([
 
 
             ], className='mdl-grid')
-
-
