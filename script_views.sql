@@ -51,3 +51,25 @@ group by a.artist_genre order by quant desc;
 
 create or replace view spotify_db.duration_track
 as select track_id, track_duration from spotify_db.track;
+
+# ----------------------------------------------------------------------------------------------------------------------
+create or replace function spotify_db.top10_tracks(data date) returns table (Track varchar, Popularidade smallint) as $$
+begin
+  return query select t.track_name, tp.track_popularity
+from spotify_db.track t join spotify_db.track_popularity tp on t.track_id = tp.track_id
+where tp.data_popularidade = data
+order by tp.track_popularity desc
+limit 10;
+end;
+$$ language plpgsql;
+
+# ----------------------------------------------------------------------------------------------------------------------
+create or replace function spotify_db.top10_artist(data date) returns table (Artist varchar, Popularidade smallint) as $$
+begin
+  return query select a.artist_name, ap.artist_popularity
+from spotify_db.artist a join spotify_db.artist_popularity ap on a.artist_id = ap.artist_id
+where ap.data_popularidade = data
+order by ap.artist_popularity desc
+limit 10;
+end;
+$$ language plpgsql;

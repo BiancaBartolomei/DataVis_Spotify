@@ -11509,6 +11509,17 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
   border-radius:10px;
 }
 
+.card-tabela{
+    -webkit-box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.19);
+  -moz-box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.19);
+  box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.19);
+  /*border-left:15px solid #2eb9ce;*/
+  background-color: #ffffff;
+  border-bottom:30px solid #5b35c1;
+  border-radius:10px;
+  padding:12px;
+}
+
 .card-2{
   -webkit-box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.19);
   -moz-box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.19);

@@ -7,6 +7,7 @@ import pandas as pd
 import plotly.graph_objs as go
 from sqlalchemy import create_engine
 from datetime import date as dt
+import dash_table
 
 engine = create_engine('postgres://luismalta:123@localhost:5432/spotify_db')
 
@@ -15,6 +16,9 @@ engine = create_engine('postgres://luismalta:123@localhost:5432/spotify_db')
 df_features_track = pd.read_sql_query('select * from spotify_db.features_track',con=engine)
 df_features_artist= pd.read_sql_query('select * from spotify_db.features_artist',con=engine)
 df_features_playlist = pd.read_sql_query('select * from spotify_db.features_playlist',con=engine)
+df_top10_track = pd.read_sql_query("select * from spotify_db.top10_tracks('2018-10-23 00:00:00.000000')",con=engine)
+df_top10_artist = pd.read_sql_query("select * from spotify_db.top10_artist('2018-10-23 00:00:00.000000')",con=engine)
+
 
 
 
@@ -27,6 +31,15 @@ server = app.server
 app.config.suppress_callback_exceptions = True
 
 app.title = "SPOTIFY DASHBOARD"
+
+def update_top10_track_dataframe(data):
+    count= 0
+    result = pd.DataFrame(columns=['Track','Popularidade'])
+    while(count < 10):
+        for i in df_top10_track['data_popularidade']:
+            if data == i:
+                print(i)
+
 
 def update_dropdown_features_track():
     opt_track= []
@@ -132,13 +145,7 @@ page_features = html.Div([
                                         id='radar-feature-track',
                                         figure={
                                             'data': [go.Scatterpolar(
-                                                r=[df_features_track['track_liveness'][4],
-                                                   df_features_track['track_speechness'][4],
-                                                   df_features_track['track_valence'][4],
-                                                   df_features_track['track_energy'][4],
-                                                   df_features_track['track_acousticness'][4],
-                                                   df_features_track['track_instrumentalness'][4],
-                                                   df_features_track['track_dancebility'][4]],
+                                                r=[0,0,0,0,0,0,0],
                                                 theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
                                                        'Instrumentalness', 'Dancebility'],
                                                 fill='toself',
@@ -148,7 +155,7 @@ page_features = html.Div([
                                                 polar=dict(
                                                     radialaxis=dict(
                                                         visible=True,
-                                                        range=[0, 1]
+                                                        range=[0.0, 1.0]
                                                     )
                                                 ),
                                                 showlegend=True
@@ -191,13 +198,7 @@ page_features = html.Div([
                                         id='radar-feature-artist',
                                         figure={
                                             'data': [go.Scatterpolar(
-                                                r=[df_features_artist['track_liveness'][4],
-                                                   df_features_artist['track_speechness'][4],
-                                                   df_features_artist['track_valence'][4],
-                                                   df_features_artist['track_energy'][4],
-                                                   df_features_artist['track_acousticness'][4],
-                                                   df_features_artist['track_instrumentalness'][4],
-                                                   df_features_artist['track_dancebility'][4]],
+                                                r=[0,0,0,0,0,0,0],
                                                 theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
                                                        'Instrumentalness', 'Dancebility'],
                                                 fill='toself',
@@ -249,13 +250,7 @@ page_features = html.Div([
                                             id='radar-feature-playlist',
                                             figure={
                                                 'data': [go.Scatterpolar(
-                                                    r=[df_features_playlist['track_liveness'][4],
-                                                       df_features_playlist['track_speechness'][4],
-                                                       df_features_playlist['track_valence'][4],
-                                                       df_features_playlist['track_energy'][4],
-                                                       df_features_playlist['track_acousticness'][4],
-                                                       df_features_playlist['track_instrumentalness'][4],
-                                                       df_features_playlist['track_dancebility'][4]],
+                                                    r=[0,0,0,0,0,0,0],
                                                     theta=['Liveness', 'Speechness', 'Valence', 'Energy',
                                                            'Acousticness',
                                                            'Instrumentalness', 'Dancebility'],
@@ -289,38 +284,58 @@ page_features = html.Div([
               [dash.dependencies.Input('dropdown-feature-track', 'value')])
 def display_page(track_selected):
     temp = df_features_track
-    if track_selected:
-        temp = df_features_track.loc[df_features_track['track_name']==track_selected]
-
-
     traces = []
     layout_trace = []
 
+    if track_selected:
+        temp = df_features_track.loc[df_features_track['track_name']==track_selected]
 
-    traces.append(go.Scatterpolar(
-        r=[temp['track_liveness'].values[0], temp['track_speechness'].values[0],
-           temp['track_valence'].values[0], temp['track_energy'].values[0],
-           temp['track_acousticness'].values[0],
-           temp['track_instrumentalness'].values[0],
-           temp['track_dancebility'].values[0]],
-        theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
-               'Instrumentalness', 'Dancebility'],
-        fill='toself',
-        marker=dict(color='#4101c1'),
+        traces.append(go.Scatterpolar(
+            r=[temp['track_liveness'].values[0], temp['track_speechness'].values[0],
+               temp['track_valence'].values[0], temp['track_energy'].values[0],
+               temp['track_acousticness'].values[0],
+               temp['track_instrumentalness'].values[0],
+               temp['track_dancebility'].values[0]],
+            theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
+                   'Instrumentalness', 'Dancebility'],
+            fill='toself',
+            marker=dict(color='#4101c1'),
 
-    ))
+        ))
 
-    layout_trace.append(
-        go.Layout(
-            polar=dict(
-                radialaxis=dict(
-                    visible=False,
-                    range=[0, 1]
-                )
-            ),
-            showlegend=True
+        layout_trace.append(
+            go.Layout(
+                polar=dict(
+                    radialaxis=dict(
+                        visible=True,
+                        range=[0.0, 1.0]
+                    )
+                ),
+                showlegend=True
+            )
         )
-    )
+    else:
+        traces.append(go.Scatterpolar(
+            r=[0,0,0,0,0,0,0],
+            theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
+                   'Instrumentalness', 'Dancebility'],
+            fill='toself',
+            marker=dict(color='#4101c1'),
+
+        ))
+
+        layout_trace.append(
+            go.Layout(
+                polar=dict(
+                    radialaxis=dict(
+                        visible=True,
+                        range=[0.0, 1.0]
+                    )
+                ),
+                showlegend=True
+            )
+        )
+
     return {
         'data': traces,
         'layout': layout_trace
@@ -330,37 +345,62 @@ def display_page(track_selected):
               [dash.dependencies.Input('dropdown-feature-artist', 'value')])
 def display_page(artist_selected):
     temp = df_features_artist
-    if artist_selected:
-        temp = df_features_artist.loc[df_features_artist['artist_name']==artist_selected]
-
 
     traces = []
     layout_trace = []
 
+    if artist_selected:
 
-    traces.append(go.Scatterpolar(
-        r=[temp['track_liveness'].values[0], temp['track_speechness'].values[0],
-           temp['track_valence'].values[0], temp['track_energy'].values[0],
-           temp['track_acousticness'].values[0],
-           temp['track_instrumentalness'].values[0],
-           temp['track_dancebility'].values[0]],
-        theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
-               'Instrumentalness', 'Dancebility'],
-        fill='toself',
-        marker=dict(color='#4101c1')
-    ))
+        temp = df_features_artist.loc[df_features_artist['artist_name']==artist_selected]
 
-    layout_trace.append(
-        go.Layout(
-            polar=dict(
-                radialaxis=dict(
-                    visible=False,
-                    range=[0, 1]
-                )
-            ),
-            showlegend=True
+
+
+
+        traces.append(go.Scatterpolar(
+            r=[temp['track_liveness'].values[0], temp['track_speechness'].values[0],
+               temp['track_valence'].values[0], temp['track_energy'].values[0],
+               temp['track_acousticness'].values[0],
+               temp['track_instrumentalness'].values[0],
+               temp['track_dancebility'].values[0]],
+            theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
+                   'Instrumentalness', 'Dancebility'],
+            fill='toself',
+            marker=dict(color='#4101c1')
+        ))
+
+        layout_trace.append(
+            go.Layout(
+                polar=dict(
+                    radialaxis=dict(
+                        visible=True,
+                        range=[0.0, 1.0]
+                    )
+                ),
+                showlegend=True
+            )
         )
-    )
+
+    else :
+        traces.append(go.Scatterpolar(
+            r=[0,0,0,0,0,0,0],
+            theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
+                   'Instrumentalness', 'Dancebility'],
+            fill='toself',
+            marker=dict(color='#4101c1')
+        ))
+
+        layout_trace.append(
+            go.Layout(
+                polar=dict(
+                    radialaxis=dict(
+                        visible=False,
+                        range=[0, 1]
+                    )
+                ),
+                showlegend=True
+            )
+        )
+
     return {
         'data': traces,
         'layout': layout_trace
@@ -370,37 +410,61 @@ def display_page(artist_selected):
               [dash.dependencies.Input('dropdown-feature-playlist', 'value')])
 def display_page(playlist_selected):
     temp = df_features_playlist
+    traces = []
+    layout_trace = []
+
     if playlist_selected:
         temp = df_features_playlist.loc[df_features_playlist['playlist_name']==playlist_selected]
 
 
-    traces = []
-    layout_trace = []
 
 
-    traces.append(go.Scatterpolar(
-        r=[temp['track_liveness'].values[0], temp['track_speechness'].values[0],
-           temp['track_valence'].values[0], temp['track_energy'].values[0],
-           temp['track_acousticness'].values[0],
-           temp['track_instrumentalness'].values[0],
-           temp['track_dancebility'].values[0]],
-        theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
-               'Instrumentalness', 'Dancebility'],
-        fill='toself',
-        marker=dict(color='#4101c1')
-    ))
 
-    layout_trace.append(
-        go.Layout(
-            polar=dict(
-                radialaxis=dict(
-                    visible=False,
-                    range=[0, 1]
-                )
-            ),
-            showlegend=True
+        traces.append(go.Scatterpolar(
+            r=[temp['track_liveness'].values[0], temp['track_speechness'].values[0],
+               temp['track_valence'].values[0], temp['track_energy'].values[0],
+               temp['track_acousticness'].values[0],
+               temp['track_instrumentalness'].values[0],
+               temp['track_dancebility'].values[0]],
+            theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
+                   'Instrumentalness', 'Dancebility'],
+            fill='toself',
+            marker=dict(color='#4101c1')
+        ))
+
+        layout_trace.append(
+            go.Layout(
+                polar=dict(
+                    radialaxis=dict(
+                        visible=False,
+                        range=[0, 1]
+                    )
+                ),
+                showlegend=True
+            )
         )
-    )
+
+    else:
+        traces.append(go.Scatterpolar(
+            r=[0,0,0,0,0,0,0],
+            theta=['Liveness', 'Speechness', 'Valence', 'Energy', 'Acousticness',
+                   'Instrumentalness', 'Dancebility'],
+            fill='toself',
+            marker=dict(color='#4101c1')
+        ))
+
+        layout_trace.append(
+            go.Layout(
+                polar=dict(
+                    radialaxis=dict(
+                        visible=False,
+                        range=[0, 1]
+                    )
+                ),
+                showlegend=True
+            )
+        )
+
     return {
         'data': traces,
         'layout': layout_trace
@@ -412,18 +476,123 @@ def display_page(playlist_selected):
 # PAGE TOP 10
 
 page_top_10 =  html.Div([
-                dcc.Graph(
-                    id='musicas_populares',
-                    figure={
-                        'data': [
-                            {'x': [10,20,30], 'y': ['a','b','c'], 'type': 'bar'},
-                        ],
-                        'layout': {
-                            'yaxis': {'title': 'Popularidade'}
-                        }
-                    }
+
+    html.Div([
+        dcc.DatePickerSingle(
+            id='date-top10',
+            date=dt(2018, 11, 1)
+        )
+    ], className='mdl-cell mdl-cell--12-col'),
+
+
+
+    html.Div([
+        html.Div([
+            html.Div([
+                html.Div([
+                    html.H3(['Track'])
+                ], className='card')
+            ],className='mdl-cell mdl-cell--6-col'),
+            html.Div(['Artist'],className='mdl-cell mdl-cell--6-col'),
+
+            html.Div([
+                html.Table(
+                    # Header
+                    [html.Tr(
+                        [html.Th(col, className='mdl-data-table__cell--non-numeric') for col in
+                         df_top10_track.columns])] +
+
+                    # Body
+                    [html.Tr([
+                        html.Td(df_top10_track.iloc[i][col], className='mdl-data-table__cell--non-numeric') for col
+                        in
+                        df_top10_track.columns
+                    ]) for i in range(min(len(df_top10_track), 10))], className='mdl-data-table mdl-js-data-table'
                 ),
+            ], className='mdl-cell mdl-cell--6-col'),
+
+            html.Div([
+                html.Table(
+                    # Header
+                    [html.Tr(
+                        [html.Th(col, className='mdl-data-table__cell--non-numeric') for col in
+                         df_top10_artist.columns])] +
+
+                    # Body
+                    [html.Tr([
+                        html.Td(df_top10_artist.iloc[i][col], className='mdl-data-table__cell--non-numeric') for col
+                        in
+                        df_top10_artist.columns
+                    ]) for i in range(min(len(df_top10_artist), 10))], className='mdl-data-table mdl-js-data-table'
+                ),
+            ], className='mdl-cell mdl-cell--6-col'),
+
+        ],className='mdl-grid')
+    ], className='mdl-cell mdl-cell--12-col', id='top10_page')
             ], className='mdl-grid')
+@app.callback(dash.dependencies.Output('top10_page', 'children'),
+              [dash.dependencies.Input('date-top10', 'date')])
+def display_page(data):
+
+    query = data + ' 00:00:00.000000'
+    df_top10_track = pd.read_sql_query('select * from spotify_db.top10_tracks(' + "'" + query + "'"+')',
+                                       con=engine)
+    df_top10_artist = pd.read_sql_query('select * from spotify_db.top10_artist(' + "'" + query + "'"+')',
+                                       con=engine)
+
+    return html.Div([
+
+            html.Div([
+                html.Div([], className='mdl-cell mdl-cell--1-col'),
+                    html.Div([
+                        html.H3(['Track #1: ' + df_top10_track['track'][0]], className='titulo-texto')
+                    ], className='card')
+                ],className='mdl-cell mdl-cell--4-col'),
+            html.Div([],className='mdl-cell mdl-cell--1-col'),
+
+            html.Div([
+                html.Div([], className='mdl-cell mdl-cell--1-col'),
+                    html.Div([
+                        html.H3(['Artist #1: ' + df_top10_artist['artist'][0]], className='titulo-texto')
+                    ], className='card')
+                ], className='mdl-cell mdl-cell--4-col'),
+            html.Div([], className='mdl-cell mdl-cell--1-col'),
+
+            html.Div([
+                html.Table(
+                    # Header
+                    [html.Tr(
+                        [html.Th(col, className='mdl-data-table__cell--non-numeric') for col in
+                         df_top10_track.columns])] +
+
+                    # Body
+                    [html.Tr([
+                        html.Td(df_top10_track.iloc[i][col], className='mdl-data-table__cell--non-numeric') for col
+                        in
+                        df_top10_track.columns
+                    ]) for i in range(min(len(df_top10_track), 10))], className='mdl-data-table mdl-js-data-table'
+                ),
+            ], className='mdl-cell mdl-cell--6-col'),
+
+            html.Div([
+                html.Table(
+                    # Header
+                    [html.Tr(
+                        [html.Th(col, className='mdl-data-table__cell--non-numeric') for col in
+                         df_top10_artist.columns])] +
+
+                    # Body
+                    [html.Tr([
+                        html.Td(df_top10_artist.iloc[i][col], className='mdl-data-table__cell--non-numeric') for col
+                        in
+                        df_top10_artist.columns
+                    ]) for i in range(min(len(df_top10_artist), 10))], className='mdl-data-table mdl-js-data-table'
+                ),
+            ], className='mdl-cell mdl-cell--6-col'),
+
+        ],className='mdl-grid')
+
+
 # ----------------------------------------------------------------------------------------------------------------------
  # ----------------------------------------------------------------------------------------------------------------------
 # PAGE FEATURES
