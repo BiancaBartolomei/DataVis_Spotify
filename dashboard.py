@@ -7,7 +7,7 @@ import pandas as pd
 import plotly.graph_objs as go
 from sqlalchemy import create_engine
 from datetime import date as dt
-import dash_table
+
 
 engine = create_engine('postgres://luismalta:123@localhost:5432/spotify_db')
 

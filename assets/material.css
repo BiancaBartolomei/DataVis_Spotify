@@ -11505,7 +11505,7 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
   box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.19);
   /*border-left:15px solid #2eb9ce;*/
   background-color: #ffffff;
-  border-bottom:30px solid #5b35c1;
+  border-bottom:30px solid #42419e;
   border-radius:10px;
 }
 
@@ -11515,7 +11515,7 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
   box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.19);
   /*border-left:15px solid #2eb9ce;*/
   background-color: #ffffff;
-  border-bottom:30px solid #5b35c1;
+  border-bottom:30px solid #7500c1;
   border-radius:10px;
   padding:12px;
 }
@@ -11553,10 +11553,11 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
 }
 
 .titulo-grafico{
-  font-size: 30px;
+  font-size: 20px;
   text-align:center;
-  color:rgba(100, 97, 104,1);
+  color: rgb(153, 149, 159);
   font-family: Roboto;
+  margin-left: 5px;
 }
 
 

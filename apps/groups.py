@@ -5,7 +5,11 @@ import dash_html_components as html
 import pandas as pd
 import plotly.graph_objs as go
 from sqlalchemy import create_engine
+
 import numpy as np
+from datetime import date as dt
+from app import app
+
 
 engine = create_engine('postgres://luismalta:123@localhost:5432/spotify_db')
 
