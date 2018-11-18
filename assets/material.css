@@ -6188,7 +6188,7 @@ input.mdl-button[type="submit"] {
   height: 32px;
   width: 32px;
   min-width: 32px;
-  color: rgb(97,97,97);
+  color: rgb(31, 120, 255);
   border-radius: 50%;
   padding: 0;
   margin-left: 0;
@@ -6494,7 +6494,9 @@ input.mdl-button[type="submit"] {
   width: 24px;
   font-size: 24px;
   box-sizing: border-box;
-  color: rgb(117,117,117); }
+  color: rgb(31, 120, 255);
+    background-color: rgb(31, 120, 255);
+}
 
 .mdl-list__item-avatar,
 .mdl-list__item-avatar.material-icons {
@@ -6502,9 +6504,11 @@ input.mdl-button[type="submit"] {
   width: 40px;
   box-sizing: border-box;
   border-radius: 50%;
-  background-color: rgb(117,117,117);
+  background-color: rgb(31, 120, 255);
   font-size: 40px;
-  color: white; }
+  color: rgb(31, 120, 255);
+    border-color: #00acc1;
+}
 
 .mdl-list__item--two-line {
   height: 72px; }
@@ -10423,7 +10427,7 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
   -webkit-transform-origin: top center;
           transform-origin: top center;
   z-index: 999;
-  background: rgba(97,97,97, 0.9);
+  background: rgba(31, 120, 255, 0.9);
   border-radius: 2px;
   color: rgb(255,255,255);
   display: inline-block;

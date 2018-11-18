@@ -6,8 +6,8 @@ import pandas as pd
 import plotly.graph_objs as go
 from sqlalchemy import create_engine
 
-engine = create_engine('postgres://luismalta:123@localhost:5432/spotify_db')
-# engine = create_engine('postgres://biancabartolomei:19972015@localhost:5432/spotify')
+# engine = create_engine('postgres://luismalta:123@localhost:5432/spotify_db')
+engine = create_engine('postgres://biancabartolomei:19972015@localhost:5432/spotify')
 
 df_features_track = pd.read_sql_query('select * from spotify_db.features_track',con=engine)
 df_features_artist= pd.read_sql_query('select * from spotify_db.features_artist',con=engine)

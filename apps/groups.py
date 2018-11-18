@@ -11,16 +11,16 @@ from datetime import date as dt
 from app import app
 
 
-engine = create_engine('postgres://luismalta:123@localhost:5432/spotify_db')
+engine = create_engine('postgres://biancabartolomei:19972015@localhost:5432/spotify')
 
 df_artist_genre = pd.read_sql_query('select * from spotify_db.musicas_por_genero', con=engine)
 df_explicit_genre = pd.read_sql_query('select * from spotify_db.explicit_genre', con=engine)
 df_duration_track = pd.read_sql_query('select * from spotify_db.duration_track', con=engine)
 
-
 colors_artist_genre = ['#110014', '#220128', '#33013c', '#440250', '#550264', '#660278', '#77038c', '#8803a0',
                        '#9904b4', '#ab04c8', '#bc04dc', '#cd05f0', '#d70ffa', '#da23fb', '#de37fb', '#e040fb',
                        '#e45ffc', '#e873fc', '#eb87fd', '#ee9bfd']
+
 
 group_1 = np.percentile(df_duration_track['track_duration'], 25)
 group_2 = np.percentile(df_duration_track['track_duration'], 50)
@@ -51,16 +51,86 @@ def group_selection():
 
 page_grupos = html.Div([
 
-                # html.Div([
-                # ], className='mdl-cell mdl-cell--1-col'),
-                html.Div([
-                    # html.Div([
-                        html.H1(['Análises de Grupo'], className='titulo-grupos')
-                    # ], className='titulo-grupos'),
-                ], className='mdl-cell mdl-cell--3-col'),
-                html.Div([
-                ], className='mdl-cell mdl-cell--1-col'),
+    # Card Ranking
+    html.Div([
+        html.Div([
+            html.Div([
 
+                html.H6(['Ranking'],className='mdl-cell mdl-cell--12-col'),
+                html.Hr([],className='mdl-cell mdl-cell--12-col'),
+
+                # Data Picker
+                html.Div([
+                    html.Ul([
+                        html.Li([
+                            html.Span([
+                                html.I([], className='material-icons mdl-list__item-avatar'),
+                                html.Span(['100']),
+                                html.Span(['Generos musicais diferentes'], className='mdl-list__item-text-body'),
+                            ], className='mdl-list__item-primary-content'),
+                            html.Span([
+                                html.A([
+                                    html.I(['star'], className='material-icons'),
+                                ], className='mdl-list__item-secondary-content'),
+                            ], className='mdl-list__item-secondary-content'),
+                        ], className='mdl-list__item mdl-list__item--three-line'),
+
+                        html.Li([
+                            html.Span([
+                                html.I([], className='mdl-list__item-avatar'),
+                                html.Span(['200']),
+                                html.Span(['Quantidade de artistas'], className='mdl-list__item-text-body'),
+                            ], className='mdl-list__item-primary-content'),
+                            html.Span([
+                                html.A([
+                                    html.I(['star'], className='material-icons'),
+                                ], className='mdl-list__item-secondary-content'),
+                            ], className='mdl-list__item-secondary-content'),
+                        ], className='mdl-list__item mdl-list__item--three-line'),
+
+                        html.Li([
+                            html.Span([
+                                html.I([], className='material-icons mdl-list__item-avatar'),
+                                html.Span(['200']),
+                                html.Span(['albuns'], className='mdl-list__item-text-body'),
+                            ], className='mdl-list__item-primary-content'),
+                            html.Span([
+                                html.A([
+                                    html.I(['star'], className='material-icons'),
+                                ], className='mdl-list__item-secondary-content'),
+                            ], className='mdl-list__item-secondary-content'),
+                        ], className='mdl-list__item mdl-list__item--three-line'),
+
+                        html.Li([
+                            html.Span([
+                                html.I([], className='material-icons mdl-list__item-avatar'),
+                                html.Span(['4']),
+                                html.Span(['categorias'], className='mdl-list__item-text-body'),
+                            ], className='mdl-list__item-primary-content'),
+                            html.Span([
+                                html.A([
+                                    html.I(['star'], className='material-icons'),
+                                ], className='mdl-list__item-secondary-content'),
+                            ], className='mdl-list__item-secondary-content'),
+                        ], className='mdl-list__item mdl-list__item--three-line'),
+
+                        html.Li([
+                            html.Span([
+                                html.I([], className='material-icons mdl-list__item-avatar'),
+                                html.Span(['10']),
+                                html.Span(['playlists'], className='mdl-list__item-text-body'),
+                            ], className='mdl-list__item-primary-content'),
+                            html.Span([
+                                html.A([
+                                    html.I(['star'], className='material-icons'),
+                                ], className='mdl-list__item-secondary-content'),
+                            ], className='mdl-list__item-secondary-content'),
+                        ], className='mdl-list__item mdl-list__item--three-line'),
+
+                    ], className='demo-list-three mdl-list'),
+                ], className='mdl-cell mdl-cell--4-col'),
+
+                # Ranking Track
                 html.Div([
                     html.Div([
                         dcc.Graph(
@@ -82,12 +152,30 @@ page_grupos = html.Div([
                             },
 
                         ),
-                    ], className='card-2'),
+                    ], className='card'),
                 ], className='mdl-cell mdl-cell--8-col'),
 
+            ], className='mdl-grid'),
+        ], className='card')
+    ],className='mdl-cell mdl-cell--12-col', id ='card-ranking'),
 
+    html.Div([
+        html.Hr([])
+    ], className='mdl-cell mdl-cell--12-col'),
+
+    # ==================================================================================================================
+    # Card evolucao
+    html.Div([
+
+        html.Div([
+
+            html.Div([
+
+                html.H6(['Downgrade e Upgrade'], className='titulo-grafico'),
+                html.Hr([], className='mdl-cell mdl-cell--12-col'),
 
                 html.Div([
+
                     html.Div([
                         dcc.Graph(
                             id='pizza-explicit-genre',
@@ -107,10 +195,12 @@ page_grupos = html.Div([
                                 }
                             }
                         ),
-                    ], className='card'),
-                ], className='mdl-cell mdl-cell--7-col'),
+                    ], className='card')
+
+                ], className='mdl-cell mdl-cell--6-col'),
 
                 html.Div([
+
                     html.Div([
                         dcc.Graph(
                             id='pizza-duration-track',
@@ -131,8 +221,20 @@ page_grupos = html.Div([
                             },
                         ),
                     ], className='card')
-                ], className='mdl-cell mdl-cell--5-col'),
 
+                ], className='mdl-cell mdl-cell--6-col'),
+
+            ], className='mdl-grid')
+
+        ], className='card')
+
+    ], className='mdl-cell mdl-cell--12-col'),
+
+    html.Div([
+
+        html.Hr([])
+
+    ], className='mdl-cell mdl-cell--12-col'),
 
 
             ], className='mdl-grid')

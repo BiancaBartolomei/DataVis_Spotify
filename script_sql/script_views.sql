@@ -1,5 +1,5 @@
 create or replace view spotify_db.top_musicas_populares as
-  select t.track_name, a.artist_name, p.track_popularity,
+  select t.track_id, t.track_name, a.artist_name, p.track_popularity,
   p.data_popularidade, a.artist_genre
   from spotify_db.track as t
   inner join spotify_db.track_artist using (track_id)
@@ -73,3 +73,53 @@ order by ap.artist_popularity desc
 limit 10;
 end;
 $$ language plpgsql;
+
+# ----------------------------------------------------------------------------------------------------------------------
+create or replace function spotify_db.maior_decrescimo()
+returns varchar as $$
+declare pop spotify_db.min_max_dates%rowtype;
+maior_dec int := 0;
+id varchar := '';
+begin
+for pop in select * from spotify_db.min_max_dates
+loop
+
+if (pop.track_popularity - pop.min_pop) < maior_dec then
+  maior_dec = (pop.track_popularity - pop.min_pop);
+  id = pop.track_id;
+end if;
+end loop;
+return id;
+end;
+$$ language plpgsql;
+
+create or replace function spotify_db.maior_crescimento()
+returns varchar as $$
+declare pop spotify_db.min_max_dates%rowtype;
+maior_cres int := 0;
+id varchar := '';
+begin
+for pop in select * from spotify_db.min_max_dates
+loop
+
+if (pop.track_popularity - pop.min_pop) > maior_cres then
+  maior_cres = (pop.track_popularity - pop.min_pop);
+  id = pop.track_id;
+end if;
+end loop;
+return id;
+end;
+$$ language plpgsql;
+
+
+create or replace view spotify_db.max_date as
+select a.track_id, track_popularity, a.data_popularidade from (select track_id, max(data_popularidade) as data_popularidade
+from spotify_db.track_popularity group by track_id) a join spotify_db.track_popularity
+t on t.track_id = a.track_id and t.data_popularidade = a.data_popularidade order by t.track_id
+
+create or replace view as spotify_db.min_date
+select a.track_id, track_popularity, a.data_popularidade from (select track_id, min(data_popularidade) as data_popularidade
+from spotify_db.track_popularity group by track_id) a join spotify_db.track_popularity
+t on t.track_id = a.track_id and t.data_popularidade = a.data_popularidade order by t.track_id
+
+create or replace view spotify_db.min_max_dates as select max.track_id, data_popularidade, track_popularity, min_date, min_pop from spotify_db.max_date max join spotify_db.min_date min on max.track_id = min.track_id;
