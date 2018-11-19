@@ -5062,6 +5062,7 @@ input.mdl-button[type="submit"] {
     position: relative;
     vertical-align: middle;
     height: 48px;
+      width:300px;
     border-top: 1px solid rgba(0, 0, 0, 0.12);
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     padding-top: 12px;
@@ -6459,13 +6460,15 @@ input.mdl-button[type="submit"] {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-align-items: center;
+      -webkit-align-items: center;
         -ms-flex-align: center;
             align-items: center; }
     .mdl-list__item .mdl-list__item-primary-content .mdl-list__item-icon {
       margin-right: 32px; }
     .mdl-list__item .mdl-list__item-primary-content .mdl-list__item-avatar {
-      margin-right: 16px; }
+      margin-right: 16px;
+      background-color: #440250;
+    }
   .mdl-list__item .mdl-list__item-secondary-content {
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -6478,7 +6481,8 @@ input.mdl-button[type="submit"] {
             align-items: flex-end;
     margin-left: 16px; }
     .mdl-list__item .mdl-list__item-secondary-content .mdl-list__item-secondary-action label {
-      display: inline; }
+      display: inline;
+    }
     .mdl-list__item .mdl-list__item-secondary-content .mdl-list__item-secondary-info {
       font-size: 12px;
       font-weight: 400;
@@ -6507,7 +6511,6 @@ input.mdl-button[type="submit"] {
   background-color: rgb(31, 120, 255);
   font-size: 40px;
   color: rgb(31, 120, 255);
-    border-color: #00acc1;
 }
 
 .mdl-list__item--two-line {
@@ -7563,7 +7566,7 @@ input.mdl-button[type="submit"] {
   min-height: 64px;
   max-height: 1000px;
   z-index: 3;
-  background-color: rgb(63,81,181);
+  background-color: rgb(148, 148, 148);
   color: rgb(255,255,255);
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   transition-duration: 0.2s;
@@ -7751,7 +7754,7 @@ input.mdl-button[type="submit"] {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  background-color: rgb(63,81,181);
+  background-color: rgb(225, 225, 225);
   overflow-y: hidden;
   overflow-x: scroll; }
   .mdl-layout__tab-bar::-webkit-scrollbar {
@@ -7802,7 +7805,7 @@ input.mdl-button[type="submit"] {
   width: 56px;
   z-index: 4;
   text-align: center;
-  background-color: rgb(63,81,181);
+  background-color: rgb(225, 225, 225);
   color: transparent;
   cursor: pointer;
   -webkit-user-select: none;
@@ -11502,6 +11505,23 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
   direction: ltr;
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
+    /*color: #1f78ff;*/
+}
+.material-icons2 {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+    color: #1f78ff;
 }
 .card {
   -webkit-box-shadow: 0px 0px 12px 3px rgba(0,0,0,0.19);
@@ -11586,3 +11606,7 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
 
 }
 
+.card_data {
+    margin-top: 300px;
+    position: center;
+}

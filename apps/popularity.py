@@ -43,19 +43,24 @@ page_top_10 =  html.Div([
                 html.H6(['Ranking'],className='mdl-cell mdl-cell--12-col'),
                 html.Hr([],className='mdl-cell mdl-cell--12-col'),
 
+                html.Div([], className='mdl-cell mdl-cell--1-col'),
                 # Ranking Track
                 html.Div([
                     html.Div([
 
                     ], className='card'),
-                ], className='mdl-cell mdl-cell--5-col'),
+                ], className='mdl-cell mdl-cell--4-col'),
 
                 # Data Picker
                 html.Div([
-                    dcc.DatePickerSingle(
-                        id='date-ranking',
-                        date=dt(2018, 11, 1)
-                    )
+                    html.Div([
+                        dcc.DatePickerSingle(
+                            id='date-ranking',
+                            date=dt(2018, 11, 1)
+                        )
+
+                    ], className='card'),
+
                 ], className='mdl-cell mdl-cell--2-col'),
 
                 # Ranking Artist
@@ -238,15 +243,32 @@ def display_page(data):
 
                 # Ranking Track
 
-                html.Div([],className='mdl-cell mdl-cell--2-col'),
+                html.Div([],className='mdl-cell mdl-cell--1-col'),
 
                 html.Div([
+                    html.Ul([
 
+                        html.Li([
+
+                            html.Span([
+                                # html.I([], className='material-icons mdl-list__item-avatar'),
+                                html.Span(['As músicas mais populares']),
+                                html.Span(['Popularidade de 0 a 100, no dia '+ data], className='mdl-list__item-text-body'),
+                            ], className='mdl-list__item-primary-content'),
+
+                            html.Span([
+                                html.A([
+                                    html.I(['star'], className='material-icons2'),
+                                ], className='mdl-list__item-secondary-content'),
+                            ], className='mdl-list__item-secondary-content'),
+
+                        ], className='mdl-list__item mdl-list__item--three-line'),
+                    ], className='demo-list-three mdl-list'),
                     html.Table(
-                        # Header
-                        [html.Tr(
-                            [html.Th(col, className='mdl-data-table__cell--non-numeric') for col in
-                             df_top10_track.columns])] +
+                        # # Header
+                        # [html.Tr(
+                        #     [html.Th(col, className='mdl-data-table__cell--non-numeric') for col in
+                        #      df_top10_track.columns])] +
 
                         # Body
                         [html.Tr([
@@ -258,38 +280,60 @@ def display_page(data):
                         className='mdl-data-table mdl-js-data-table'
                     ),
 
-                ], className='mdl-cell mdl-cell--3-col'),
+                ], className='mdl-cell mdl-cell--4-col'),
 
                 # Data Picker
                 html.Div([
-                    dcc.DatePickerSingle(
-                        id='date-top10',
-                        date=dt(2018, 11, 1)
-                    )
+                    html.Div([
+                        dcc.DatePickerSingle(
+                            id='date-top10',
+                            date=dt(2018, 11, 1)
+                        )
+                    ], className='card_data'),
+
                 ], className='mdl-cell mdl-cell--2-col'),
 
                 # Ranking Artist
                 html.Div([
 
-                    html.Table(
-                        # Header
-                        [html.Tr(
-                            [html.Th(col, className='mdl-data-table__cell--non-numeric') for col in
-                             df_top10_track.columns])] +
+                        html.Ul([
 
-                        # Body
-                        [html.Tr([
-                            html.Td(df_top10_track.iloc[i][col], className='mdl-data-table__cell--non-numeric') for
-                            col
-                            in
-                            df_top10_track.columns
-                        ]) for i in range(min(len(df_top10_track), 10))],
-                        className='mdl-data-table mdl-js-data-table'
-                    ),
+                            html.Li([
 
-                ], className='mdl-cell mdl-cell--3-col'),
+                                html.Span([
+                                    # html.I([], className='material-icons mdl-list__item-avatar'),
+                                    html.Span(['As artistas mais populares']),
+                                    html.Span(['Popularidade de 0 a 100, no dia ' + data],
+                                              className='mdl-list__item-text-body'),
+                                ], className='mdl-list__item-primary-content'),
 
-                html.Div([], className='mdl-cell mdl-cell--2-col'),
+                                html.Span([
+                                    html.A([
+                                        html.I(['star'], className='material-icons'),
+                                    ], className='mdl-list__item-secondary-content'),
+                                ], className='mdl-list__item-secondary-content'),
+
+                            ], className='mdl-list__item mdl-list__item--three-line'),
+                        ], className='demo-list-three mdl-list'),
+                        html.Table(
+                            # # Header
+                            # [html.Tr(
+                            #     [html.Th(col, className='mdl-data-table__cell--non-numeric') for col in
+                            #      df_top10_artist.columns])] +
+
+                            # Body
+                            [html.Tr([
+                                html.Td(df_top10_artist.iloc[i][col], className='mdl-data-table__cell--non-numeric') for
+                                col
+                                in
+                                df_top10_artist.columns
+                            ]) for i in range(min(len(df_top10_artist), 10))],
+                            className='mdl-data-table mdl-js-data-table'
+                        ),
+
+                ], className='mdl-cell mdl-cell--4-col'),
+
+                # html.Div([], className='mdl-cell mdl-cell--2-col'),
 
             ], className='mdl-grid'),
         ], className='card')
