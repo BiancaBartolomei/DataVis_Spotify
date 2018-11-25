@@ -29,9 +29,9 @@ app.layout = html.Div([
     html.Div([
         html.Span(['Menu'], className='mdl-layout-title'),
         html.Nav([
-            dcc.Link('Análise de grupos', href='/apps/page-grupos', className='mdl-navigation__link'),
+            dcc.Link('Análise de Grupos', href='/apps/page-grupos', className='mdl-navigation__link'),
             dcc.Link('Análise de Features', href='/apps/page-features', className='mdl-navigation__link'),
-            dcc.Link('Análise de popularidade', href='/apps/page-popularidade', className='mdl-navigation__link'),
+            dcc.Link('Análise de Popularidade', href='/apps/page-popularidade', className='mdl-navigation__link'),
         ], className='mdl-navigation')
     ], className='mdl-layout__drawer'),
 

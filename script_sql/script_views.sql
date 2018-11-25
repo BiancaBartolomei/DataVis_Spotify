@@ -42,11 +42,12 @@ create or replace view spotify_db.features_playlist as
 #-----------------------------------------------------------------------------------------------------------------------
 
 create or replace view spotify_db.explicit_genre
-as  select count(t.track_id) as quant, a.artist_genre
-from spotify_db.track t join spotify_db.track_artist ta on t.track_id = ta.track_id
-join spotify_db.artist a on ta.artist_id = a.artist_id
-where track_explicit = 't' and a.artist_genre is not null
-group by a.artist_genre order by quant desc;
+as  select count(t.track_id) as quant, p.playlist_category
+from spotify_db.track_artist a join spotify_db.track t on a.track_id = t.track_id
+join spotify_db.track_playlist tp on t.track_id = tp.track_id
+join spotify_db.playlist p on p.playlist_id = tp.playlist_id
+where track_explicit = 't'
+group by a.playlist_category order by quant desc;
 
 
 create or replace view spotify_db.duration_track
@@ -123,3 +124,11 @@ from spotify_db.track_popularity group by track_id) a join spotify_db.track_popu
 t on t.track_id = a.track_id and t.data_popularidade = a.data_popularidade order by t.track_id
 
 create or replace view spotify_db.min_max_dates as select max.track_id, data_popularidade, track_popularity, min_date, min_pop from spotify_db.max_date max join spotify_db.min_date min on max.track_id = min.track_id;
+
+
+create or replace view spotify_db.quant_artist_category as
+select p.playlist_category, count(a.artist_id) as quant
+from spotify_db.track_artist a join spotify_db.track t on a.track_id = t.track_id
+join spotify_db.track_playlist tp on t.track_id = tp.track_id
+join spotify_db.playlist p on p.playlist_id = tp.playlist_id
+group by p.playlist_category order by quant desc;

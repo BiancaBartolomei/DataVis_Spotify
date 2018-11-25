@@ -13,7 +13,8 @@ from app import app
 
 engine = create_engine('postgres://biancabartolomei:19972015@localhost:5432/spotify')
 
-df_artist_genre = pd.read_sql_query('select * from spotify_db.musicas_por_genero', con=engine)
+df_artist_genre = pd.read_sql_query('select * from spotify_db.quant_artist_category', con=engine)
+df_artist_genre2 = pd.read_sql_query('select * from spotify_db.musicas_por_genero', con=engine)
 df_explicit_genre = pd.read_sql_query('select * from spotify_db.explicit_genre', con=engine)
 df_duration_track = pd.read_sql_query('select * from spotify_db.duration_track', con=engine)
 quant_cat = engine.execute("select count(count) from (select count(playlist_category) from spotify_db.playlist group by playlist_category) a").cursor.fetchall()[0][0]
@@ -21,10 +22,13 @@ quant_albuns = engine.execute("select count(album_id) from spotify_db.album").cu
 quant_art = engine.execute("select count(artist_id) from spotify_db.artist").cursor.fetchall()[0][0]
 quant_track = engine.execute("select count(track_id) from spotify_db.track").cursor.fetchall()[0][0]
 
-colors_artist_genre = ['#110014', '#220128', '#33013c', '#440250', '#550264', '#660278', '#77038c', '#8803a0',
-                       '#9904b4', '#ab04c8', '#bc04dc', '#cd05f0', '#d70ffa', '#da23fb', '#de37fb', '#e040fb',
+colors_artist_genre = ['#110014', '#220128', '#33013c', '#440250',
+                       '#550264', '#660278', '#77038c', '#8803a0',
+                       '#9904b4', '#ab04c8', '#bc04dc', '#cd05f0',
+                       '#d70ffa', '#da23fb', '#de37fb', '#e040fb',
                        '#e45ffc', '#e873fc', '#eb87fd', '#ee9bfd']
-color_g = ['#550264', '#660278', '#77038c', '#8803a0', '#9904b4']
+
+color_g = ['#33013c', '#660278', '#9904b4', '#da23fb', '#ee9bfd']
 
 group_1 = 150000 # 2:30
 group_2 = 200000 # 3:20
@@ -79,7 +83,7 @@ page_grupos = html.Div([
 
                             html.Span([
                                 html.I([], className='material-icons mdl-list__item-avatar'),
-                                html.Span([str(df_artist_genre['artist_genre'].size)]),
+                                html.Span([str(df_artist_genre2['artist_genre'].size)]),
                                 html.Span(['GÊNEROS MUSICAIS'], className='mdl-list__item-text-body'),
                             ], className='mdl-list__item-primary-content'),
 
@@ -153,14 +157,16 @@ page_grupos = html.Div([
                             id='pizza-artist-genre',
                             figure={
                                 'data': [go.Pie(
-                                    labels=df_artist_genre['artist_genre'][:20],
-                                    values=df_artist_genre['quant'][:20],
+                                    labels=df_artist_genre['playlist_category'],
+                                    values=df_artist_genre['quant'],
                                     textinfo='value',
+                                    textposition='outside',
+                                    outsidetextfont=dict(size=16, color=['#000000','#000000','#000000','#000000']),
                                     hole=.4,
-                                    marker=dict(colors=colors_artist_genre),
+                                    marker=dict(colors=color_g),
                                 )],
                                 'layout': {
-                                    'title': 'Quantidade de artistas por gênero musical',
+                                    'title': 'Quantidade de artistas por categoria musical',
                                     'font': {'family': 'Roboto',
                                              'size': 12,
                                              'color': '#646168'},
@@ -197,11 +203,13 @@ page_grupos = html.Div([
                             id='pizza-explicit-genre',
                             figure={
                                 'data': [go.Pie(
-                                    labels=df_explicit_genre['artist_genre'][:20],
-                                    values=df_explicit_genre['quant'][:20],
+                                    labels=df_explicit_genre['playlist_category'],
+                                    values=df_explicit_genre['quant'],
                                     textinfo='value',
+                                    textposition='outside',
+                                    outsidetextfont=dict(size=16, color=['#000000', '#000000', '#000000', '#000000']),
                                     hole=.4,
-                                    marker=dict(colors=colors_artist_genre),
+                                    marker=dict(colors=color_g),
                                 )],
                                 'layout': {
                                     'title': 'Quantidade de músicas explícitas por gênero musical',
@@ -226,6 +234,8 @@ page_grupos = html.Div([
                                             'Entre 3:20 e 4 min', 'Entre 4 e 5 min', 'Maior que 5 min'],
                                     values=group_selection(),
                                     textinfo='value',
+                                    textposition='outside',
+                                    outsidetextfont=dict(size=16, color=['#000000', '#000000', '#000000', '#000000', '#000000']),
                                     hole=.4,
                                     marker=dict(colors=color_g),
                                 )],
