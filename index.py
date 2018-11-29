@@ -42,7 +42,6 @@ app.layout = html.Div([
 
 ], className='mdl-layout mdl-js-layout')
 
-
 # Leva até as páginas desejadas
 @app.callback(dash.dependencies.Output('page-main', 'children'),
               [dash.dependencies.Input('url', 'pathname')])
@@ -58,5 +57,9 @@ def display_page(pathname):
         return popularity.page_top_10
 
 
+# def escolhe_db():
+    # return opt
+
 if __name__ == '__main__':
+    # opt = input('Para utilizar o banco de dados postgres, digite P, para usar o MongoDB, digite M.')
     app.run_server(debug=True)

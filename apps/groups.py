@@ -9,18 +9,48 @@ from sqlalchemy import create_engine
 import numpy as np
 from datetime import date as dt
 from app import app
+from pymongo import MongoClient
 
+opt = 'P'
 
-engine = create_engine('postgres://biancabartolomei:19972015@localhost:5432/spotify')
+if opt == 'P':
+    engine = create_engine('postgres://bd_t2:senha@localhost:5432/spotify_final')
 
-df_artist_genre = pd.read_sql_query('select * from spotify_db.quant_artist_category', con=engine)
-df_artist_genre2 = pd.read_sql_query('select * from spotify_db.musicas_por_genero', con=engine)
-df_explicit_genre = pd.read_sql_query('select * from spotify_db.explicit_genre', con=engine)
-df_duration_track = pd.read_sql_query('select * from spotify_db.duration_track', con=engine)
-quant_cat = engine.execute("select count(count) from (select count(playlist_category) from spotify_db.playlist group by playlist_category) a").cursor.fetchall()[0][0]
-quant_albuns = engine.execute("select count(album_id) from spotify_db.album").cursor.fetchall()[0][0]
-quant_art = engine.execute("select count(artist_id) from spotify_db.artist").cursor.fetchall()[0][0]
-quant_track = engine.execute("select count(track_id) from spotify_db.track").cursor.fetchall()[0][0]
+    df_artist_genre = pd.read_sql_query('select * from spotify_db.quant_artist_category', con=engine)
+    df_artist_genre2 = pd.read_sql_query('select * from spotify_db.musicas_por_genero', con=engine)
+    df_explicit_genre = pd.read_sql_query('select * from spotify_db.explicit_genre', con=engine)
+    df_duration_track = pd.read_sql_query('select * from spotify_db.duration_track', con=engine)
+
+    quant_cat = engine.execute("select count(count) from (select count(playlist_category) from spotify_db.playlist group by playlist_category) a").cursor.fetchall()[0][0]
+    quant_albuns = engine.execute("select count(album_id) from spotify_db.album").cursor.fetchall()[0][0]
+    quant_art = engine.execute("select count(artist_id) from spotify_db.artist").cursor.fetchall()[0][0]
+    quant_track = engine.execute("select count(track_id) from spotify_db.track").cursor.fetchall()[0][0]
+
+elif opt == 'M':
+    myclient = MongoClient("mongodb://localhost:27017/")
+    mydb = myclient["spotify_db"]
+    track_mongo = mydb["track"]
+    # artist_mongo = mydb["artist"]
+
+    track_query = track_mongo.find({}, {
+        "_id": False,
+        "track_duration": True,
+    })
+
+    df_duration_track = pd.DataFrame(list(track_query))
+
+    engine = create_engine('postgres://bd_t2:senha@localhost:5432/spotify_final')
+
+    df_artist_genre = pd.read_sql_query('select * from spotify_db.quant_artist_category', con=engine)
+    df_artist_genre2 = pd.read_sql_query('select * from spotify_db.musicas_por_genero', con=engine)
+    df_explicit_genre = pd.read_sql_query('select * from spotify_db.explicit_genre', con=engine)
+
+    quant_cat = engine.execute(
+        "select count(count) from (select count(playlist_category) from spotify_db.playlist group by playlist_category) a").cursor.fetchall()[
+        0][0]
+    quant_albuns = engine.execute("select count(album_id) from spotify_db.album").cursor.fetchall()[0][0]
+    quant_art = engine.execute("select count(artist_id) from spotify_db.artist").cursor.fetchall()[0][0]
+    quant_track = engine.execute("select count(track_id) from spotify_db.track").cursor.fetchall()[0][0]
 
 colors_artist_genre = ['#110014', '#220128', '#33013c', '#440250',
                        '#550264', '#660278', '#77038c', '#8803a0',
@@ -212,7 +242,7 @@ page_grupos = html.Div([
                                     marker=dict(colors=color_g),
                                 )],
                                 'layout': {
-                                    'title': 'Quantidade de músicas explícitas por gênero musical',
+                                    'title': 'Quantidade de músicas explícitas por categoria musical',
                                     'font': {'family': 'Roboto',
                                              'size': 12,
                                              'color': '#646168'}

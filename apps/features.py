@@ -8,13 +8,50 @@ from sqlalchemy import create_engine
 import dash
 
 from app import app
+from pymongo import MongoClient
 
-# engine = create_engine('postgres://luismalta:123@localhost:5432/spotify_db')
-engine = create_engine('postgres://biancabartolomei:19972015@localhost:5432/spotify')
+df_features_track = pd.DataFrame()
+df_features_artist = pd.DataFrame()
+df_features_playlist = pd.DataFrame()
 
-df_features_track = pd.read_sql_query('select * from spotify_db.features_track',con=engine)
-df_features_artist= pd.read_sql_query('select * from spotify_db.features_artist',con=engine)
-df_features_playlist = pd.read_sql_query('select * from spotify_db.features_playlist',con=engine)
+
+opt = 'P'
+
+if opt == 'P':
+    # engine = create_engine('postgres://luismalta:123@localhost:5432/spotify_db')
+    engine = create_engine('postgres://bd_t2:senha@localhost:5432/spotify_final')
+
+    df_features_track = pd.read_sql_query('select * from spotify_db.features_track',con=engine)
+    df_features_artist= pd.read_sql_query('select * from spotify_db.features_artist',con=engine)
+    df_features_playlist = pd.read_sql_query('select * from spotify_db.features_playlist',con=engine)
+elif opt == 'M':
+    myclient = MongoClient("mongodb://localhost:27017/")
+    mydb = myclient["spotify_db"]
+    track_mongo = mydb["track"]
+    # artist_mongo = mydb["artist"]
+
+    track_query = track_mongo.find({}, {
+        "_id": False,
+        "track_name": True,
+        "track_liveness": True,
+        "track_speechness": True,
+        "track_valence": True,
+        "track_energy": True,
+        "track_acousticness": True,
+        "track_instrumentalness": True,
+        "track_dancebility": True,
+    })
+
+    df_features_track = pd.DataFrame(list(track_query))
+
+    engine = create_engine('postgres://bd_t2:senha@localhost:5432/spotify_final')
+    df_features_artist = pd.read_sql_query('select * from spotify_db.features_artist', con=engine)
+    df_features_playlist = pd.read_sql_query('select * from spotify_db.features_playlist', con=engine)
+# artist_query = track_mongo.find({})
+# df_artist_mongo = pd.DataFrame(list(artist_query))
+
+# track_query = track_mongo.find({})
+# df_track_mongo = pd.DataFrame(list(track_query))
 
 
 def update_dropdown_features_track():

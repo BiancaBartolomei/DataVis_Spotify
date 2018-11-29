@@ -14,7 +14,7 @@ from sklearn.metrics import mean_squared_error
 
 np.random.seed(7)
 
-engine = create_engine('postgres://biancabartolomei:19972015@localhost:5432/spotify')
+engine = create_engine('postgres://bd_t2:senha@localhost:5432/spotify')
 
 dataframe = pd.read_sql_query("select * from spotify_db.track_popularity where track_id='4as4XEOR03oGm1STUKl6pa'", con=engine, parse_dates=['data_popularidade'])
 dataframe.drop('track_id', axis=1, inplace=True)

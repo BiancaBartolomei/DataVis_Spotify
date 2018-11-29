@@ -11,14 +11,42 @@ from datetime import date as dt
 
 
 from app import app
+from pymongo import MongoClient
+import datetime
 
-engine = create_engine('postgres://biancabartolomei:19972015@localhost:5432/spotify')
-df_top10_track = pd.read_sql_query("select * from spotify_db.top10_tracks('2018-10-23 00:00:00.000000')",con=engine)
-df_top10_artist = pd.read_sql_query("select * from spotify_db.top10_artist('2018-10-23 00:00:00.000000')",con=engine)
-df_popularity = pd.read_sql_query("select * from spotify_db.top_musicas_populares", con=engine)
-track_id_dec = engine.execute("select * from spotify_db.maior_decrescimo()").cursor.fetchall()[0][0]
-track_id_cres = engine.execute("select * from spotify_db.maior_crescimento()").cursor.fetchall()[0][0]
 
+opt = 'P'
+
+if opt == 'M':
+
+    myclient = MongoClient("mongodb://localhost:27017/")
+    mydb = myclient["spotify_db"]
+    track_mongo = mydb["track"]
+
+    df_top10_artist = pd.DataFrame(list(mydb["track"].aggregate([{"$unwind":"$track_popularity"}, {"$match":{"track_popularity.data_popularidade": datetime.datetime(2018, 11, 5, 0, 0)}},{"$project":{"track_name":True, "track_popularity.track_popularity":True, "_id":False}}, {"$sort":{"track_popularity.track_popularity":-1}}])))
+
+
+
+
+    engine = create_engine('postgres://bd_t2:senha@localhost:5432/spotify_final')
+
+    df_top10_track = pd.read_sql_query("select * from spotify_db.top10_tracks('2018-10-23 00:00:00.000000')",con=engine)
+    # df_top10_artist = pd.read_sql_query("select * from spotify_db.top10_artist('2018-10-23 00:00:00.000000')",con=engine)
+    df_popularity = pd.read_sql_query("select * from spotify_db.top_musicas_populares", con=engine)
+
+    track_id_dec = engine.execute("select * from spotify_db.maior_decrescimo()").cursor.fetchall()[0][0]
+    track_id_cres = engine.execute("select * from spotify_db.maior_crescimento()").cursor.fetchall()[0][0]
+
+elif opt == 'P':
+
+    engine = create_engine('postgres://bd_t2:senha@localhost:5432/spotify_final')
+
+    df_top10_track = pd.read_sql_query("select * from spotify_db.top10_tracks('2018-10-23 00:00:00.000000')",con=engine)
+    df_top10_artist = pd.read_sql_query("select * from spotify_db.top10_artist('2018-10-23 00:00:00.000000')",con=engine)
+    df_popularity = pd.read_sql_query("select * from spotify_db.top_musicas_populares", con=engine)
+
+    track_id_dec = engine.execute("select * from spotify_db.maior_decrescimo()").cursor.fetchall()[0][0]
+    track_id_cres = engine.execute("select * from spotify_db.maior_crescimento()").cursor.fetchall()[0][0]
 # ======================================================================================================================
 def update_dropdown_track():
     musicas = []
@@ -230,8 +258,17 @@ page_top_10 =  html.Div([
 def display_page(data):
 
     query = data + ' 00:00:00.000000'
+    # df_top10_track = pd.DataFrame(list(mydb["track"].aggregate([{"$unwind": "$track_popularity"}, {
+    #     "$match": {"track_popularity.data_popularidade": datetime.datetime(int(data[:4]), int(data[5:7]), int(data[8:10]), 0, 0)}}, {
+    #                                                     "$project": {"track_name": True,
+    #                                                                  "track_popularity.track_popularity": True,
+    #                                                                  "_id": False}},
+    #                                                 {"$sort": {"track_popularity.track_popularity": -1}}])))
+
     df_top10_track = pd.read_sql_query('select * from spotify_db.top10_tracks(' + "'" + query + "'"+')',
                                        con=engine)
+
+
     df_top10_artist = pd.read_sql_query('select * from spotify_db.top10_artist(' + "'" + query + "'"+')',
                                        con=engine)
 
@@ -323,7 +360,8 @@ def display_page(data):
 
                             # Body
                             [html.Tr([
-                                html.Td(df_top10_artist.iloc[i][col], className='mdl-data-table__cell--non-numeric') for
+                                html.Td(df_top10_artist.iloc[i][col], className='mdl-data-table__cell--non-numeric')
+                                for
                                 col
                                 in
                                 df_top10_artist.columns
